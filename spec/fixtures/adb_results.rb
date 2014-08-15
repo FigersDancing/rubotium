@@ -51,6 +51,10 @@ module Fixtures
       def passed_negative_time
         "\r\ncom.android.explore.ExploreRecommendations:.\r\nTest results for RandomizingRunner=.\r\nTime: -53.656\r\n\r\nOK (1 test)\r\n\r\n\r\n"
       end
+
+      def system_crash
+        "\r\ncom.soundcloud.android.player.Player:INSTRUMENTATION_ABORTED: System has crashed.\r\n"
+      end
     end
   end
 end

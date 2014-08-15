@@ -48,7 +48,9 @@ module Rubotium
         end
 
         def has_errored?
-          (result.include? 'INSTRUMENTATION_RESULT') || (result.include? 'INSTRUMENTATION_STATUS')
+          ['INSTRUMENTATION_ABORTED', 'INSTRUMENTATION_RESULT','INSTRUMENTATION_STATUS'].any? {|error_message|
+            result.include? error_message
+          }
         end
 
         def has_failed?
@@ -66,17 +68,19 @@ module Rubotium
         def get_error
           if instrumentation_error
             result.match(/INSTRUMENTATION_RESULT: longMsg=(.*)\r/)[1]
+          elsif application_error
+            result.match(/INSTRUMENTATION_ABORTED: (.*)/)[1]
           else
             result.match(/INSTRUMENTATION_STATUS: Error=(.*)\r/)[1]
           end
-
         end
+
         def application_error
-          result.match(/INSTRUMENTATION_RESULT: longMsg=(.*)\r/) == nil
+          result.match(/INSTRUMENTATION_ABORTED/) != nil
         end
 
         def instrumentation_error
-          result.match(/INSTRUMENTATION_STATUS:/) == nil
+          result.match(/INSTRUMENTATION_RESULT: longMsg/) != nil
         end
     end
   end

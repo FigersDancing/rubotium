@@ -121,4 +121,12 @@ describe Rubotium::Adb::TestResultParser do
       parsed_result.time.should == 53.656
     end
   end
+
+  context 'system crash' do
+    let(:parsed_result) { parser.new(Fixtures::Adb.system_crash, "", "") }
+
+    it 'should know the error reason' do
+      parsed_result.error_message.should == "System has crashed.\r"
+    end
+  end
 end
