@@ -35,7 +35,7 @@ module Rubotium
       puts "#{tests_count} tests to run"
 
       devices = Devices.new(opts[:device_matcher]).all
-      test_suites   = Grouper.new(test_suites).create_groups(devices.count)
+      test_suites = Grouper.new(test_suites, devices.count).create_groups
 
       devices.each_with_index{|device, index|
         device.test_package_name = "com.android.tests"

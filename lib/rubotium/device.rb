@@ -20,19 +20,17 @@ module Rubotium
     def run_tests
       raise(NoTestSuiteError, "Please setup test suite before running tests") if testsuite.nil?
       puts "Running tests"
-      testsuite.each{|package_name, tests|
-        @results[package_name] = []
-        puts "Test package: #{package_name}"
-        tests.each{|test|
-          run_count = 0
-          puts "TEST: #{package_name} #{test}"
-          while ((result = runner.run_test(package_name, test)) && (result.failed? || result.errored?) && run_count < @retry ) do
-            puts "RERUNNING TEST: #{package_name} #{test}, STATUS: #{result.status}"
+      testsuite.each{|runable_test|
+        @results[runable_test.package_name] = []
+        puts runable_test.name
+        run_count = 0
+        puts "TEST: #{runable_test.name}"
+        while ((result = runner.run_test(runable_test)) && (result.failed? || result.errored?) && run_count < @retry ) do
+            puts "RERUNNING TEST: #{runable_test.name}, STATUS: #{result.status}"
             run_count += 1
           end
-          puts "FINISHED with status: #{result.status}"
-          @results[package_name].push(result)
-        }
+        puts "FINISHED with status: #{result.status}"
+          @results[runable_test.package_name].push(result)
       }
     end
 

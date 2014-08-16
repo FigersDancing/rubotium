@@ -11,10 +11,10 @@ module Rubotium
         @adb_shell = Rubotium::Adb::Shell.new(device)
       end
 
-      def run_test(package_name, test_name)
+      def run_test(runable_test)
         check_packages
-        result = adb_shell.run_command(instrument_command(package_name, test_name))
-        TestResultParser.new(result, package_name, test_name)
+        result = adb_shell.run_command(instrument_command(runable_test.package_name, runable_test.test_name))
+        TestResultParser.new(result, runable_test.package_name, runable_test.test_name)
       end
 
       private
