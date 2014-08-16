@@ -4,6 +4,7 @@ require 'fixtures/javap_classes'
 require 'fixtures/jar_contents'
 require 'fixtures/adb_results'
 require 'fixtures/adb_devices_results'
+require 'rspec/mocks'
 
 SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 

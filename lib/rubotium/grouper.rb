@@ -1,24 +1,40 @@
 module Rubotium
   class Grouper
-    def initialize(test_suites)
-      @test_suites = test_suites
+    def initialize(test_suites, num_of_groups)
+      @test_suites   = test_suites
+      @num_of_groups = num_of_groups
     end
 
-    def create_groups(num_of_groups)
-      groups = Array.new(num_of_groups) { Hash.new {|hash, key| hash[key] = []} }
-
-      enum = groups.cycle
-      test_suites.each{|test_suite, tests|
-        tests.each{|test|
-          group = enum.next
-          group[test_suite].push(test)
-        }
+    def create_groups
+      runnable_tests.each{|runnable|
+        next_bucket.push(runnable)
       }
-      groups
+      buckets
+    end
+
+    def runnable_tests
+      test_suites.map {|test_suite|
+        test_suite.test_cases.map{|test|
+          RunableTest.new(test_suite.name, test.name)
+        }
+      }.flatten
+    end
+
+    def next_bucket
+      buckets_enum.next
+    end
+
+    def buckets_enum
+      @buckets_enum ||= buckets.cycle
+    end
+
+
+    def buckets
+      @buckets ||= Array.new(num_of_groups) { [] }
     end
 
     private
-    attr_reader :test_suites
+    attr_reader :test_suites, :num_of_groups
 
   end
 end

@@ -6,6 +6,9 @@ require 'rubotium/device'
 require 'rubotium/devices'
 require 'rubotium/formatters/junit_formatter'
 require 'rubotium/grouper'
+require 'rubotium/test_case'
+require 'rubotium/test_suite'
+require 'rubotium/runable_test'
 
 require 'parallel'
 module Rubotium
@@ -21,23 +24,23 @@ module Rubotium
     def new(opts = {})
       raise RuntimeError, "Empty configuration" if opts.empty?
       jar_reader = JarReader.new(opts[:tests_apk])
-      tests      = jar_reader.get_tests
+      test_suites      = jar_reader.get_tests
 
       tests_count = 0
-      tests.each{|_,tests|
-        tests_count = tests_count + tests.count
+      test_suites.each{|test_suite|
+        tests_count = tests_count + test_suite.test_cases.count
       }
 
-      puts "There are #{tests.count} packages with tests in the Jar file"
+      puts "There are #{test_suites.count} packages with tests in the Jar file"
       puts "#{tests_count} tests to run"
 
       devices = Devices.new(opts[:device_matcher]).all
-      tests   = Grouper.new(tests).create_groups(devices.count)
+      test_suites   = Grouper.new(test_suites).create_groups(devices.count)
 
       devices.each_with_index{|device, index|
         device.test_package_name = "com.android.tests"
         device.test_runner_name  = "com.android.tests.RandomizingRunner"
-        device.testsuite         = tests[index]
+        device.testsuite         = test_suites[index]
       }
 
       startTime = Time.now

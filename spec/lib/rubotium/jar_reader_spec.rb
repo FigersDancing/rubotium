@@ -7,8 +7,8 @@ describe Rubotium::JarReader do
       Rubotium::CMD.stub(:run_command).and_return("")
     end
     it 'should return empty array' do
-      jar_reader.get_classes.should be_kind_of Array
-      jar_reader.get_classes.should be_empty
+      jar_reader.test_suites.should be_kind_of Array
+      jar_reader.test_suites.should be_empty
     end
   end
 
@@ -25,12 +25,12 @@ describe Rubotium::JarReader do
     end
 
     it 'should return an array with classes' do
-      jar_reader.get_classes.should be_kind_of Array
-      jar_reader.get_classes.should_not be_empty
+      jar_reader.test_suites.should be_kind_of Array
+      jar_reader.test_suites.should_not be_empty
     end
 
     it 'should convert class names to valid format' do
-      jar_reader.get_classes.first.should eql "com.android.screens.HomeScreen"
+      jar_reader.test_suites.first.name.should eql "com.android.screens.HomeScreen"
     end
 
     it 'should get the pacakges with tests' do
@@ -40,15 +40,7 @@ describe Rubotium::JarReader do
 
     it 'should know the tests per package' do
       tests = jar_reader.get_tests
-      tests["com.android.auth.login.LoginFlowTest"].should == [ "testGPlusLoginFlow",
-                                                                           "testLoginAndLogout",
-                                                                           "testLoginWithFacebookWebFlow",
-                                                                           "testLoginWithWrongCredentials",
-                                                                           "testNoGooglePlusAccountLogin",
-                                                                           "testRecoverPassword",
-                                                                           "testRecoverPasswordNoInput",
-                                                                           "testSCUserLoginFlow"
-                                                                          ]
+      tests.first.test_cases.count.should == 8
     end
 
   end
@@ -59,7 +51,7 @@ describe Rubotium::JarReader do
       Rubotium::CMD.stub(:run_command).and_return(Fixtures::JarContents.duplicated_classes)
     end
     it 'deduplicates classess' do
-      jar_reader.get_classes.should == ['com.android.tests.Waiter']
+      jar_reader.test_suites.count.should == 1
     end
   end
 
