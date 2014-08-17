@@ -10,6 +10,9 @@ This is an Android's Instrumentation test runner. It's in quite early phase but 
 
     gem install rubotium
 
+## Requirements:
+ Installed android SDK with `aapt` in your PATH 
+ Installed `java` with `javap` in your PATH
 ## Usage
 
     $ rubotium -t <path_to_tests.apk> -a <path_to_application.apk> -r <instrumentation_test_runner>
