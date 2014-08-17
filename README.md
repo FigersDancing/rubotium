@@ -1,24 +1,19 @@
 # Rubotium
 
-TODO: Write a gem description
+This is an Android's Instrumentation test runner. It's in quite early phase but already solves couple of issues with instrumentation tests: 
+ 
+ * runs tests in parallel
+ * retries failed tests
+ * does execute all the package tests even if the app dies during the execution
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'rubotium'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install rubotium
+    gem install rubotium
 
 ## Usage
 
-TODO: Write usage instructions here
+    $ rubotium -t <path_to_tests.apk> -a <path_to_application.apk> -r <instrumentation_test_runner>
+    $ rubotium -h for help
 
 ## Contributing
 
