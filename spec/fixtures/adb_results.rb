@@ -53,7 +53,7 @@ module Fixtures
       end
 
       def system_crash
-        "\r\ncom.soundcloud.android.player.Player:INSTRUMENTATION_ABORTED: System has crashed.\r\n"
+        "\r\ncom.android.player.Player:INSTRUMENTATION_ABORTED: System has crashed.\r\n"
       end
     end
   end

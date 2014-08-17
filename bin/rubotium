@@ -9,10 +9,9 @@ opts = Trollop::options do
     opt :app_apk_path,    'Path to the app   .apk file',  :type     => :string,       :short  =>  '-a'
     opt :rerun,           'Retries count',                :default  => 0,             :short  =>  '-R'
     opt :out,             'Report file',                  :default  => 'report.xml',  :short  =>  '-o'
-    opt :device,          'Match devices',                :default  => nil,    :short  =>  '-d'
+    opt :device,          'Match devices',                :type     => :string,       :short  =>  '-d'
+    opt :runner,          'Test runner',                  :type     => :string,       :short  =>  'r'
 end
-
-Trollop::die :test_jar_path, "Please provide path to tests .jar file" if !opts[:test_jar_path]
 
 params = {
     :tests_jar_path     => opts[:test_jar_path],
@@ -20,7 +19,8 @@ params = {
     :app_apk_path       => opts[:app_apk_path],
     :rerun_count        => opts[:rerun],
     :report             => opts[:out],
-    :device_matcher     => opts[:device]
+    :device_matcher     => opts[:device],
+    :runner             => opts[:runner]
 }
 
 Rubotium.new(params)

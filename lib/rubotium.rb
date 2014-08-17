@@ -28,21 +28,21 @@ module Rubotium
       startTime = Time.now
       application_package = Rubotium::Package.new(opts[:app_apk_path])
       tests_package       = Rubotium::Package.new(opts[:tests_apk_path])
+      test_runner         = opts[:runner]
 
-      dir = Dir.mktmpdir
-      begin
-        # use the directory...
-        Rubotium::Apk::Converter.new(tests_package.path, File.join(dir, 'tests.jar')).convert_to_jar
-        jar_reader  = JarReader.new(opts[:tests_jar_path])
-        test_suites = jar_reader.get_tests
-      ensure
-        # remove the directory.
-        FileUtils.remove_entry dir
+      if (opts[:tests_jar_path])
+        test_suites  = JarReader.new(opts[:tests_jar_path]).get_tests
+      else
+        path_to_jar = File.join(Dir.mktmpdir, 'tests.jar')
+        begin
+          puts("Convertig dex to jar")
+          Rubotium::Apk::Converter.new(tests_package.path, path_to_jar).convert_to_jar
+          puts("Reading jar content")
+          test_suites = jar_reader  = JarReader.new(path_to_jar).get_tests
+        ensure
+          FileUtils.remove_entry(path_to_jar)
+        end
       end
-
-
-      # jar_reader  = JarReader.new(opts[:tests_jar_path])
-      # test_suites = #jar_reader.get_tests
 
       tests_count = 0
       test_suites.each{|test_suite|
@@ -67,7 +67,7 @@ module Rubotium
 
       devices.each_with_index{|device, index|
         device.test_package_name = tests_package.name
-        device.test_runner_name  = "com.soundcloud.android.tests.RandomizingRunner"
+        device.test_runner_name  = test_runner || "android.test.InstrumentationTestRunner"
         device.testsuite         = test_suites[index]
       }
 
