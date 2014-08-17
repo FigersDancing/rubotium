@@ -4,7 +4,9 @@ require 'rubotium'
 
 require 'trollop'
 opts = Trollop::options do
-    opt :test_jar_path,   'Path to the tests .jar file',  :type     => :string,       :short  =>  '-t'
+    opt :test_jar_path,   'Path to the tests .jar file',  :type     => :string,       :short  =>  '-j'
+    opt :test_apk_path,   'Path to the tests .apk file',  :type     => :string,       :short  =>  '-t'
+    opt :app_apk_path,    'Path to the app   .apk file',  :type     => :string,       :short  =>  '-a'
     opt :rerun,           'Retries count',                :default  => 0,             :short  =>  '-R'
     opt :out,             'Report file',                  :default  => 'report.xml',  :short  =>  '-o'
     opt :device,          'Match devices',                :default  => nil,    :short  =>  '-d'
@@ -13,7 +15,9 @@ end
 Trollop::die :test_jar_path, "Please provide path to tests .jar file" if !opts[:test_jar_path]
 
 params = {
-    :tests_apk          => opts[:test_jar_path],
+    :tests_jar_path     => opts[:test_jar_path],
+    :tests_apk_path     => opts[:test_apk_path],
+    :app_apk_path       => opts[:app_apk_path],
     :rerun_count        => opts[:rerun],
     :report             => opts[:out],
     :device_matcher     => opts[:device]

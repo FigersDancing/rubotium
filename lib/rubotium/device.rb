@@ -7,6 +7,7 @@ module Rubotium
       @retry    = 1
       @serial   = serial
       @results  = {}
+      @command  = Rubotium::Adb::Command.new(serial)
     end
 
     def test_runner_name= name
@@ -15,6 +16,14 @@ module Rubotium
 
     def test_package_name= name
       runner.test_package_name = name
+    end
+
+    def install(apk_path)
+      command.execute(Rubotium::Adb::InstallCommand.new(apk_path))
+    end
+
+    def uninstall(package_name)
+      command.execute(Rubotium::Adb::UninstallCommand.new(package_name))
     end
 
     def run_tests
@@ -35,6 +44,6 @@ module Rubotium
     end
 
     private
-    attr_reader :runner
+    attr_reader :runner, :command
   end
 end

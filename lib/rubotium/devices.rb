@@ -16,7 +16,7 @@ module Rubotium
     private
       attr_reader :matched, :attached_devices
 
-      def matched_devices device_matcher
+      def matched_devices(device_matcher)
         device_matcher ? attached_devices.select{|device|
           device.include? device_matcher
         } : attached_devices

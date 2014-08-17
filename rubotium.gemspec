@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "rubotium"
   spec.version       = Rubotium::VERSION
   spec.authors       = ["Slawomir Smiechura"]
-  spec.email         = ["slaw@gmail.com"]
+  spec.email         = ["ssmiech@gmail.com"]
   spec.summary       = "Run your Robotium tests with ease"
   spec.description   = "This gem allows to run Robotium tests in parallel on multiple devices"
   spec.homepage      = ""
@@ -25,7 +25,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-mocks"
   spec.add_development_dependency "rake"
 
-  spec.add_dependency 'builder',  '3.2.2'
-  spec.add_dependency 'trollop',  '2.0'
-  spec.add_dependency 'parallel', '0.9.2'
+  spec.add_dependency 'builder',      '3.2.2'
+  spec.add_dependency 'trollop',      '2.0'
+  spec.add_dependency 'parallel',     '0.9.2'
+  spec.add_dependency 'dex2jar',      '0.0.6'
+  spec.add_dependency 'android_apk',  '0.7.0'
 end
