@@ -30,7 +30,7 @@ module Rubotium
       raise(NoTestSuiteError, "Please setup test suite before running tests") if testsuite.nil?
       puts "Running tests"
       testsuite.each{|runable_test|
-        @results[runable_test.package_name] = []
+        @results[runable_test.package_name] = [] if(@results[runable_test.package_name].nil?)
         puts runable_test.name
         run_count = 0
         puts "TEST: #{runable_test.name}"
