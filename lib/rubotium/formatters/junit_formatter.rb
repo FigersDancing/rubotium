@@ -12,14 +12,14 @@ module Rubotium
         @xml = Builder::XmlMarkup.new :target => ensure_io(report_path), :indent => 2
 
         xml.testsuites do
-          results.each{|package_name, tests|
-            start_test_suite(package_name, tests)
+          results.each{|_, tests|
+            start_test_suite(tests)
           }
         end
       end
       private
         attr_reader :report_file_path, :device_serial, :results
-        def start_test_suite(package_name, tests)
+        def start_test_suite(tests)
           failures    = get_failures(tests)
           errors      = get_errors(tests)
           tests_time  = get_tests_time(tests)
@@ -27,7 +27,7 @@ module Rubotium
           params = {
                     :errors     => errors,
                     :failures   => failures,
-                    :name       => package_name,
+                    :name       => device_serial,
                     :tests      => tests_count,
                     :time       => tests_time,
                     :timestamp  => Time.now
@@ -41,7 +41,7 @@ module Rubotium
         end
 
         def print_testcase(test)
-          xml.testcase(:classname=>"#{@device_serial}.#{test.package_name}", :name=>test.test_name, :time=>test.time) do
+          xml.testcase(:classname=>test.package_name, :name=>test.test_name, :time=>test.time) do
             has_failures(test)
             has_errors(test)
           end
