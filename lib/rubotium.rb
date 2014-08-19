@@ -55,16 +55,6 @@ module Rubotium
       devices = Devices.new(opts[:device_matcher]).all
       test_suites = Grouper.new(test_suites, devices.count).create_groups
 
-      devices.each{|device|
-        device.uninstall application_package.name
-        device.install application_package.path
-      } if application_package.valid?
-
-      devices.each{|device|
-        device.uninstall tests_package.name
-        device.install tests_package.path
-      } if tests_package.valid?
-
       devices.each_with_index{|device, index|
         device.test_package_name = tests_package.name
         device.test_runner_name  = test_runner || "android.test.InstrumentationTestRunner"
@@ -72,6 +62,10 @@ module Rubotium
       }
 
       devices = Parallel.map(devices, :in_processes=> devices.count) {|device|
+        device.uninstall application_package.name
+        device.install application_package.path
+        device.uninstall tests_package.name
+        device.install tests_package.path
         device.run_tests
         device
       }
