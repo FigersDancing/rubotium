@@ -4,8 +4,12 @@ module Rubotium
   module Formatters
     class JunitFormatter
       attr_reader :xml
-      def initialize(results, path_to_file)
-        @xml = Builder::XmlMarkup.new :target => ensure_io(path_to_file), :indent => 2
+      def initialize(device, path_to_file)
+        @device_serial    = device.serial
+        @results          = device.results
+        @report_file_path = path_to_file
+
+        @xml = Builder::XmlMarkup.new :target => ensure_io(report_path), :indent => 2
 
         xml.testsuites do
           results.each{|package_name, tests|
@@ -14,6 +18,7 @@ module Rubotium
         end
       end
       private
+        attr_reader :report_file_path, :device_serial, :results
         def start_test_suite(package_name, tests)
           failures    = get_failures(tests)
           errors      = get_errors(tests)
@@ -36,7 +41,7 @@ module Rubotium
         end
 
         def print_testcase(test)
-          xml.testcase :classname=>test.package_name, :name=>test.test_name, :time=>test.time do
+          xml.testcase(:classname=>"#{@device_serial}.#{test.package_name}", :name=>test.test_name, :time=>test.time) do
             has_failures(test)
             has_errors(test)
           end
@@ -72,6 +77,10 @@ module Rubotium
           tests.select{|test|
             test.failed?
           }.count
+        end
+
+        def report_path
+          "#{device_serial}_#{report_file_path}"
         end
 
         def ensure_io(path_to_file)

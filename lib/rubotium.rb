@@ -78,7 +78,7 @@ module Rubotium
 
       puts "Tests took: #{Time.at(Time.now-startTime).utc.strftime("%H:%M:%S")}"
       devices.each{|device|
-        Formatters::JunitFormatter.new(device.results, "#{device.serial}_#{opts[:report]}")
+        Formatters::JunitFormatter.new(device, opts[:report])
       }
     end
   end
