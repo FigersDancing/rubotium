@@ -1,15 +1,20 @@
 module Rubotium
   module Adb
     class Devices
-      attr_reader :list
 
-      def initialize
-        @list = parse(CMD.run_command('adb devices',{ :timeout => 5 } ))
+      def attached
+        parse.map{|device_serial|
+          Device.new(device_serial, Adb::Instrumentation.new(device_serial))
+        }
       end
 
       private
-      def parse result
-        list = result.split("\n")
+      def adb_devices_command
+        CMD.run_command('adb devices', { :timeout => 5 } )
+      end
+
+      def parse
+        list = adb_devices_command.split("\n")
         list.shift
         attached_devices list
       end

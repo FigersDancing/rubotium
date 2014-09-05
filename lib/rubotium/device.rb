@@ -15,6 +15,10 @@ module Rubotium
       runner.test_runner = name
     end
 
+    def name
+      shell('getprop ro.product.model')
+    end
+
     def test_package_name= name
       runner.test_package_name = name
     end
@@ -32,7 +36,7 @@ module Rubotium
     end
 
     def shell(command)
-      @adb_shell.run_command(command)
+      adb_shell.run_command(command)
     end
 
     def run_tests
@@ -53,6 +57,6 @@ module Rubotium
     end
 
     private
-    attr_reader :runner, :command
+    attr_reader :runner, :command, :adb_shell
   end
 end

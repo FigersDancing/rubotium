@@ -54,7 +54,7 @@ module Rubotium
       puts "#{tests_count} tests to run"
 
       test_queue = Queue.new
-      devices = Devices.new(opts[:device_matcher]).all
+      devices = Devices.new(:name => opts[:device_matcher]).all
 
       test_suites.each{|test_suite|
         test_suite.test_cases.map{|test|
