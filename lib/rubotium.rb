@@ -31,39 +31,36 @@ module Rubotium
       tests_package       = Rubotium::Package.new(opts[:tests_apk_path])
       test_runner         = opts[:runner]
 
-      # if (opts[:tests_jar_path])
-      #   test_suites  = JarReader.new(opts[:tests_jar_path]).get_tests
-      # else
-      #   path_to_jar = File.join(Dir.mktmpdir, 'tests.jar')
-      #   begin
-      #     puts("Convertig dex to jar")
-      #     Rubotium::Apk::Converter.new(tests_package.path, path_to_jar).convert_to_jar
-      #     puts("Reading jar content")
-      #     test_suites = JarReader.new(path_to_jar).get_tests
-      #   ensure
-      #     FileUtils.remove_entry(path_to_jar)
-      #   end
-      # end
-      #
-      # tests_count = 0
-      # test_suites.each{|test_suite|
-      #   tests_count = tests_count + test_suite.test_cases.count
-      # }
-      #
-      # puts "There are #{test_suites.count} packages with tests in the Jar file"
-      # puts "#{tests_count} tests to run"
+      if (opts[:tests_jar_path])
+        test_suites  = JarReader.new(opts[:tests_jar_path]).get_tests
+      else
+        path_to_jar = File.join(Dir.mktmpdir, 'tests.jar')
+        begin
+          puts("Convertig dex to jar")
+          Rubotium::Apk::Converter.new(tests_package.path, path_to_jar).convert_to_jar
+          puts("Reading jar content")
+          test_suites = JarReader.new(path_to_jar).get_tests
+        ensure
+          FileUtils.remove_entry(path_to_jar)
+        end
+      end
+
+      tests_count = 0
+      test_suites.each{|test_suite|
+        tests_count = tests_count + test_suite.test_cases.count
+      }
+
+      puts "There are #{test_suites.count} packages with tests in the Jar file"
+      puts "#{tests_count} tests to run"
 
       test_queue = Queue.new
       devices = Devices.new(opts[:device_matcher]).all
-      test_queue.push(RunableTest.new('com.soundcloud.android.StreamTest', 'testStreamContainsItems'))
-      test_queue.push(RunableTest.new('com.soundcloud.android.StreamTest', 'testStreamContainsItems'))
-      test_queue.push(RunableTest.new('com.soundcloud.android.activity.Player', 'testPlayerIsNotVisibleIfNothingIsPlaying'))
 
-      # test_suites.each{|test_suite|
-      #   test_suite.test_cases.map{|test|
-      #     test_queue.push(RunableTest.new(test_suite.name, test.name))
-      #   }
-      # }
+      test_suites.each{|test_suite|
+        test_suite.test_cases.map{|test|
+          test_queue.push(RunableTest.new(test_suite.name, test.name))
+        }
+      }
 
       devices.each{|device|
         device.test_package_name = tests_package.name
