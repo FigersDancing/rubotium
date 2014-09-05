@@ -55,6 +55,10 @@ module Fixtures
       def system_crash
         "\r\ncom.android.player.Player:INSTRUMENTATION_ABORTED: System has crashed.\r\n"
       end
+
+      def gingerbread_exception
+        "android.util.AndroidException: INSTRUMENTATION_FAILED: com.soundcloud.android.tests/android.test.InstrumentationTestRunner\r\n"
+      end
     end
   end
 end

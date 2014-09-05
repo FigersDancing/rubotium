@@ -4,22 +4,22 @@ module Rubotium
   module Formatters
     class JunitFormatter
       attr_reader :xml
-      def initialize(device, path_to_file)
-        @device_serial    = device.serial
-        @results          = device.results
+      def initialize(results, path_to_file)
+        @results          = results
         @report_file_path = path_to_file
 
         @xml = Builder::XmlMarkup.new :target => ensure_io(report_path), :indent => 2
 
         xml.testsuites do
-          results.each{|_, tests|
-            start_test_suite(tests)
+          results.each{|package_name, tests|
+            start_test_suite(package_name, tests)
           }
         end
       end
       private
         attr_reader :report_file_path, :device_serial, :results
-        def start_test_suite(tests)
+        def start_test_suite(package_name, tests)
+          tests.flatten!
           failures    = get_failures(tests)
           errors      = get_errors(tests)
           tests_time  = get_tests_time(tests)
@@ -27,7 +27,7 @@ module Rubotium
           params = {
                     :errors     => errors,
                     :failures   => failures,
-                    :name       => device_serial,
+                    :name       => package_name,
                     :tests      => tests_count,
                     :time       => tests_time,
                     :timestamp  => Time.now
@@ -41,13 +41,13 @@ module Rubotium
         end
 
         def print_testcase(test)
-          xml.testcase(:classname=>test.package_name, :name=>test.test_name, :time=>test.time) do
+          xml.testcase(:classname=> test.package_name, :name=>test.test_name, :time=>test.time) do
             has_failures(test)
             has_errors(test)
           end
         end
 
-        def has_failures(test)
+      def has_failures(test)
           if test.failed?
             xml.failure :message=>"", :type=>"" do
               xml.cdata! test.stack_trace
@@ -80,7 +80,7 @@ module Rubotium
         end
 
         def report_path
-          "#{device_serial}_#{report_file_path}"
+          report_file_path
         end
 
         def ensure_io(path_to_file)

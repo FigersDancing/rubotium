@@ -129,4 +129,16 @@ describe Rubotium::Adb::TestResultParser do
       parsed_result.error_message.should == "System has crashed.\r"
     end
   end
+
+  context 'command_timeout' do
+    let(:parsed_result) { parser.new(Fixtures::Adb.gingerbread_exception, "", "") }
+
+    it 'should behave as error case' do
+      parsed_result.should be_errored
+    end
+
+    it 'should know the error reason' do
+      parsed_result.error_message.should eql('')
+    end
+  end
 end
