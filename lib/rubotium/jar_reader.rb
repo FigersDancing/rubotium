@@ -26,7 +26,7 @@ module Rubotium
     end
 
     def parse
-      test_suites.each{|test_suite|
+      Parallel.map(test_suites, :in_threads => 4) {|test_suite|
         tests_in_class(test_suite.name).scan(TEST_PATTERN).flatten.each{|test|
           test_suite.add_test_case(TestCase.new(test))
         }
