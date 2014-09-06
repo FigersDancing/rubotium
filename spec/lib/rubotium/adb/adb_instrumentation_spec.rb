@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Rubotium::Adb::Instrumentation do
   let (:instr) { described_class }
-  let(:runable_test) {double(RunableTest)}
+  let(:runable_test) {double(RunnableTest)}
 
   context 'running tests' do
     let (:inst) { instr.new(" ") }

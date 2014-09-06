@@ -15,7 +15,7 @@ module Rubotium
     def runnable_tests
       test_suites.map {|test_suite|
         test_suite.test_cases.map{|test|
-          RunableTest.new(test_suite.name, test.name)
+          RunnableTest.new(test_suite.name, test.name)
         }
       }.flatten
     end

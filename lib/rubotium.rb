@@ -58,7 +58,7 @@ module Rubotium
 
       test_suites.each{|test_suite|
         test_suite.test_cases.map{|test|
-          test_queue.push(RunableTest.new(test_suite.name, test.name))
+          test_queue.push(RunnableTest.new(test_suite.name, test.name))
         }
       }
 

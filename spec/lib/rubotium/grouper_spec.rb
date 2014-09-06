@@ -6,7 +6,7 @@ describe Rubotium::Grouper do
   let(:testsuite2) {TestSuite.new('test_package2')}
 
   before do
-    RunableTest.should_receive(:new){|arg1, arg2|
+    RunnableTest.should_receive(:new){|arg1, arg2|
       "#{arg1}, #{arg2}"
     }.at_least(:once)
   end
