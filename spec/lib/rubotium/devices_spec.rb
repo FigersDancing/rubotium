@@ -1,43 +1,48 @@
 require 'spec_helper'
+require 'ostruct'
 
 describe Rubotium::Devices do
   let(:devices_class) {described_class}
+  let(:device) {OpenStruct.new(:name=>"TestDevice")}
 
   before do
-    Rubotium::Device.stub(:new).and_return("Device_Instance")
+    Rubotium::Device.stub(:new).and_return(device)
   end
 
-  context 'given device' do
-    let(:devices) {devices_class.new('emulator')}
+  context 'with matched device' do
+    let(:devices) {devices_class.new(:name=>'TestDevice')}
+    before do
+      Rubotium::Adb::Devices.any_instance.stub(:attached).and_return([device])
+    end
+
+    it 'should return matched devices' do
+      devices.all.should == [ device ]
+    end
+
+  end
+
+  context 'with no devices attached devices' do
+    let(:devices) { devices_class.new(:name=>'Nexus') }
 
     it 'should complain about device being not accessible' do
-      Rubotium::Adb::Devices.any_instance.stub(:list).and_return([])
+      Rubotium::Adb::Devices.any_instance.stub(:attached).and_return([])
       expect { devices.all }.to raise_error(Rubotium::NoDevicesError)
     end
+  end
+  context 'with no matched' do
+    let(:devices) {devices_class.new(:name=>'Nexus')}
 
     it 'should complain about not matched devices' do
-      Rubotium::Adb::Devices.any_instance.stub(:list).and_return(['nexus'])
+      Rubotium::Adb::Devices.any_instance.stub(:attached).and_return([device])
       expect { devices.all }.to raise_error(Rubotium::NoMatchedDevicesError)
     end
-
-    it 'should return test runner per device' do
-      Rubotium::Adb::Devices.any_instance.stub(:list).and_return(['emulator'])
-      devices.all.should == [ "Device_Instance" ]
-    end
-
-    it 'should match devices' do
-      Rubotium::Adb::Devices.any_instance.stub(:list).and_return(['emulator', 'amolator', 'nexus', 'emulatores111', '113242'])
-      devices.send(:matched_devices, 'emulator').should == ["emulator", "emulatores111"]
-    end
-
   end
 
-  context 'without device' do
+  context 'without device matcher' do
     let(:devices) { devices_class.new }
 
     it 'should use all available devices' do
-      Rubotium::Adb::Devices.any_instance.stub(:list).and_return(['emulator', 'amolator', 'nexus', 'emulatores111', '113242'])
-      devices.all.should == ["Device_Instance", "Device_Instance", "Device_Instance", "Device_Instance", "Device_Instance"]
+      devices.all.should == [device]
     end
 
   end

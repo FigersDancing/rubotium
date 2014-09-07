@@ -3,23 +3,54 @@ require 'spec_helper'
 describe Rubotium::Adb::Devices do
   let(:devices)  { described_class.new }
 
-  it 'should return list of devices' do
-    Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.two_devices_attached)
-    devices.list.should == ['emulator-5554', 'emulator-5556']
+  before do
+    devices.stub(:create_device) {|serial|
+      OpenStruct.new(:name => serial)
+    }
   end
 
-  it 'should not return offline devices' do
-    Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.two_devices_attached_one_is_offline)
-    devices.list.should == ['emulator-5556']
+  context 'with one device attached' do
+    before do
+      Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.one_device)
+    end
+
+    it 'should return one device' do
+      devices.attached.count == 1
+    end
   end
 
-  it 'should return one device' do
-    Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.one_device)
-    devices.list.should == ['emulator-5554']
+  context 'when two devices are attached' do
+    before do
+      Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.two_devices_attached)
+    end
+    it 'should return list of devices' do
+      devices.attached.count.should == 2
+    end
+
+    it 'should return two different devices' do
+      devices.attached.first.should_not eql(devices.attached.last)
+    end
   end
 
-  it 'should return zero devices if none are attached' do
-    Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.one_device_offline)
-    devices.list.should == []
+  context 'with offline devices' do
+    before do
+      Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.two_devices_attached_one_is_offline)
+    end
+    it 'should not return offline devices' do
+      devices.attached.count.should == 1
+    end
+
+    it 'should return attached device' do
+      devices.attached.first.name.should eql('emulator-5556')
+    end
+  end
+
+  context 'with no devices attached' do
+    before do
+      Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.one_device_offline)
+    end
+    it 'should return zero devices if none are attached' do
+      devices.attached.should == []
+    end
   end
 end

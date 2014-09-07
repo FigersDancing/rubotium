@@ -4,11 +4,15 @@ module Rubotium
 
       def attached
         parse.map{|device_serial|
-          Device.new(device_serial, Adb::Instrumentation.new(device_serial))
+          create_device(device_serial)
         }
       end
 
       private
+      def create_device(device_serial)
+        Device.new(device_serial, Adb::Instrumentation.new(device_serial))
+      end
+
       def adb_devices_command
         CMD.run_command('adb devices', { :timeout => 5 } )
       end
