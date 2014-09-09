@@ -11,7 +11,9 @@ require 'rubotium/test_case'
 require 'rubotium/test_suite'
 require 'rubotium/runable_test'
 require 'rubotium/package'
+
 require 'fileutils'
+require 'mkmf'
 
 require 'parallel'
 module Rubotium
@@ -23,9 +25,18 @@ module Rubotium
 
   class NoTestSuiteError < Error; end
 
+  class NoAaptError < Error; end
+
+  class NoJavapError < Error; end
+
   class << self
     def new(opts = {})
-      raise RuntimeError, "Empty configuration" if opts.empty?
+      raise NoJavapError,   "No javap tool in $PATH"    if !find_executable('javap')
+      raise NoAaptError,    "No aapt tool in $PATH"     if !find_executable('aapt')
+      raise Errno::ENOENT,  "Tests apk does not exist"  if !File.exist?(opts[:tests_apk_path])
+      raise Errno::ENOENT,  "App apk does not exist"    if !File.exist?(opts[:app_apk_path])
+      raise RuntimeError,   "Empty configuration"       if opts.empty?
+
       startTime = Time.now
       application_package = Rubotium::Package.new(opts[:app_apk_path])
       tests_package       = Rubotium::Package.new(opts[:tests_apk_path])
