@@ -6,7 +6,6 @@ module Rubotium
       @adb_shell  = Rubotium::Adb::Shell.new(serial)
       @runner     = test_runner
       @retry      = 1
-      @serial     = serial
       @results    = {}
       @command    = Rubotium::Adb::Command.new(serial)
     end
