@@ -12,7 +12,6 @@ require 'rubotium/test_suite'
 require 'rubotium/runable_test'
 require 'rubotium/package'
 require 'rubotium/memory'
-require 'rubotium/adb/memory_command'
 require 'rubotium/adb/parsers/procrank'
 
 require 'fileutils'

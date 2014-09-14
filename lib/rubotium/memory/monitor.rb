@@ -44,7 +44,7 @@ module Rubotium
       end
 
       def probe_memory
-        device.shell(Rubotium::Adb::MemoryCommand.new('com.soundcloud.android').executable_command)
+        device.shell(Rubotium::Adb::Commands::MemoryCommand.new('com.soundcloud.android').executable_command)
       end
 
     end
