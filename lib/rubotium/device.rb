@@ -3,11 +3,10 @@ module Rubotium
     attr_accessor :testsuite, :test_queue
     attr_reader   :serial, :results
     def initialize(serial, test_runner)
-      @adb_shell  = Rubotium::Adb::Shell.new(serial)
+      @serial     = serial
       @runner     = test_runner
       @retry      = 1
       @results    = {}
-      @command    = Rubotium::Adb::Commands::Command.new(serial)
     end
 
     def test_runner_name= name
@@ -15,7 +14,7 @@ module Rubotium
     end
 
     def name
-      shell('getprop ro.product.model')
+      adb_command.shell('getprop ro.product.model')
     end
 
     def test_package_name= name
@@ -23,19 +22,19 @@ module Rubotium
     end
 
     def install(apk_path)
-      command.execute(Rubotium::Adb::Commands::InstallCommand.new(apk_path))
+      adb_command.install(apk_path)
     end
 
     def uninstall(package_name)
-      command.execute(Rubotium::Adb::Commands::UninstallCommand.new(package_name))
+      adb_command.uninstall(package_name)
     end
 
     def pull(path)
-      command.execute(Rubotium::Adb::Commands::PullCommand.new(path))
+      adb_command.pull(path)
     end
 
     def shell(command)
-      adb_shell.run_command(command)
+      adb_command.shell(command)
     end
 
     def run_tests
@@ -56,6 +55,10 @@ module Rubotium
     end
 
     private
-    attr_reader :runner, :command, :adb_shell
+    attr_reader :runner, :command, :serial
+
+    def adb_command
+      @command ||= Rubotium::Adb::Commands::Command.new(serial)
+    end
   end
 end
