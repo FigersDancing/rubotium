@@ -1,4 +1,6 @@
 require 'set'
+require 'rubotium/runnable_test'
+
 module Rubotium
   class JarReader
     TEST_PATTERN = Regexp.new('public void (test.*)\(')
@@ -25,13 +27,12 @@ module Rubotium
       CMD.run_command "javap -classpath #{path_to_jar} #{suite_name}"
     end
 
-    def parse
+    def parse #TODO: could this be done better
       Parallel.map(test_suites, :in_threads => 4) {|test_suite|
-        tests_in_class(test_suite.name).scan(TEST_PATTERN).flatten.each{|test|
-          test_suite.add_test_case(TestCase.new(test))
+        tests_in_class(test_suite).scan(TEST_PATTERN).flatten.map{|test|
+          Rubotium::RunnableTest.new(test_suite, test)
         }
-        test_suite
-      }.delete_if{|test_suite| test_suite.test_cases.empty?}
+      }.flatten
     end
 
 
@@ -48,7 +49,7 @@ module Rubotium
       private
       def test_suites
         converted_class_names.map{|class_name|
-          TestSuite.new(class_name)
+          class_name
         }
       end
 
@@ -61,9 +62,7 @@ module Rubotium
       end
 
       def deduplicated_test_suites
-        test_suites.uniq{|test_suite|
-          test_suite.name
-        }
+        test_suites.uniq
       end
     end
   end

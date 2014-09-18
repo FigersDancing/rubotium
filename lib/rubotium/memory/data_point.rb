@@ -1,3 +1,4 @@
+require 'json'
 module Rubotium
   module Memory
     class DataPoint
@@ -30,6 +31,21 @@ module Rubotium
 
       def cmdline
         parsed_result.cmdline
+      end
+
+      def to_s
+        to_json.to_json
+      end
+
+      def to_json
+        {
+          :time => time,
+          :pid  => pid,
+          :vss  => vss,
+          :rss  => rss,
+          :uss  => uss,
+          :cmd  => cmdline
+        }
       end
 
       private

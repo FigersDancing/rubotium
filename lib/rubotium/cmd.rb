@@ -5,7 +5,7 @@ module Rubotium
       def run_command(command_to_run, opts = {})
         begin
           Timeout::timeout(opts[:timeout] || 10 * 60) {
-            puts "[EXECUTING]: #{command_to_run}" if ENV['DEBUG']
+            Rubotium.logger.debug "[EXECUTING]: #{command_to_run}"
             `#{command_to_run}`
           }
         rescue Timeout::Error

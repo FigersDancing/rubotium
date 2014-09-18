@@ -19,7 +19,7 @@ describe Rubotium::Adb::Instrumentation do
     it 'runs correct test' do
       runable_test.stub(:package_name).and_return("package")
       runable_test.stub(:test_name).and_return("test")
-      inst.test_package_name = "package_name"
+      inst.test_package_name = double("")
       inst.test_runner = "TestRunner"
 
       command = "am instrument -w -e class package#test package_name/TestRunner"

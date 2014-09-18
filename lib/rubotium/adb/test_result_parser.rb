@@ -7,10 +7,11 @@ module Rubotium
 
       attr_reader :result, :stack_trace, :time, :error_message, :status, :package_name, :test_name
 
-      def initialize(result, package_name, test_name)
+      def initialize(result, runnable, device_name)
+        @device       = device_name
         @result       = result
-        @package_name = package_name
-        @test_name    = test_name
+        @package_name = runnable.package_name
+        @test_name    = runnable.test_name
         parse
       end
 

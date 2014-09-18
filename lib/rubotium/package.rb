@@ -2,8 +2,9 @@ require 'android_apk'
 
 module Rubotium
   class Package
-    def initialize(package_path)
+    def initialize(package_path, test_runner = '')
       @package_path = package_path
+      @test_runner  = test_runner || 'android.test.InstrumentationTestRunner'
     end
 
     def valid?
@@ -24,6 +25,10 @@ module Rubotium
 
     def version_code
       analyzed_package.version_code
+    end
+
+    def test_runner
+      @test_runner
     end
 
     private

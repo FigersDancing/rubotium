@@ -14,11 +14,7 @@ module Rubotium
     end
 
     def name
-      adb_command.shell('getprop ro.product.model')
-    end
-
-    def test_package_name= name
-      runner.test_package_name = name
+      @name ||= adb_command.shell('getprop ro.product.model').strip
     end
 
     def install(apk_path)
@@ -35,23 +31,6 @@ module Rubotium
 
     def shell(command)
       adb_command.shell(command)
-    end
-
-    def run_tests
-      raise(NoTestSuiteError, "Please setup test suite before running tests") if test_queue.nil?
-      until(test_queue.empty?)
-        runnable_test = test_queue.pop
-        @results[runnable_test.package_name] = [] if(@results[runnable_test.package_name].nil?)
-        puts runnable_test.name
-        run_count = 0
-        puts "TEST: #{runnable_test.name}"
-        while ((result = runner.run_test(runnable_test)) && (result.failed? || result.errored?) && run_count < @retry ) do
-          puts "RERUNNING TEST: #{runnable_test.name}, STATUS: #{result.status}"
-          run_count += 1
-        end
-        puts "FINISHED with status: #{result.status}"
-        @results[runnable_test.package_name].push(result)
-      end
     end
 
     private

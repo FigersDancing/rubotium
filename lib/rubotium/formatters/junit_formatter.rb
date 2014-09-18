@@ -19,7 +19,6 @@ module Rubotium
       private
         attr_reader :report_file_path, :device_serial, :results
         def start_test_suite(package_name, tests)
-          tests.flatten!
           failures    = get_failures(tests)
           errors      = get_errors(tests)
           tests_time  = get_tests_time(tests)

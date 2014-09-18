@@ -14,7 +14,7 @@ module Rubotium
     private
       attr_reader :matched, :attached_devices, :match_name, :match_serial
       def attached_devices
-        Adb::Devices.new.attached
+        @attached_devices ||= Adb::Devices.new.attached
       end
 
       def matched_devices(device_matcher)
