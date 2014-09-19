@@ -77,7 +77,7 @@ module Rubotium
         device
       }
 
-      runner = Rubotium::TestsRunner.new(devices, test_suites[0...3], tests_package)
+      runner = Rubotium::TestsRunner.new(devices, test_suites, tests_package)
       runner.run_tests
 
       FileUtils.mkdir_p(['screens', 'logs'])

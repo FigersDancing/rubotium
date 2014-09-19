@@ -1,5 +1,3 @@
-require 'android_apk'
-
 module Rubotium
   class Package
     def initialize(package_path, test_runner = '')
@@ -35,7 +33,7 @@ module Rubotium
     attr_reader :package_path
 
     def analyzed_package
-      @analyzed_package ||= AndroidApk.analyze(package_path)
+      @analyzed_package ||= Rubotium::Apk::AndroidApk.analyze(package_path)
     end
   end
 end
