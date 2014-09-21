@@ -7,8 +7,8 @@ module Rubotium
     def group_by_package
       json = {}
       results.each{|result|
-        json[result.package_name] = [] unless json[result.package_name]
-        json[result.package_name].push(result)
+        json[result.class_name] = [] unless json[result.class_name]
+        json[result.class_name].push(result)
       }
       json
     end

@@ -1,5 +1,4 @@
 require 'rubotium/version'
-require 'rubotium/jar_reader'
 require 'rubotium/adb'
 require 'rubotium/apk'
 require 'rubotium/cmd'
@@ -7,7 +6,6 @@ require 'rubotium/device'
 require 'rubotium/devices'
 require 'rubotium/tests_runner'
 require 'rubotium/formatters/junit_formatter'
-require 'rubotium/grouper'
 require 'rubotium/test_case'
 require 'rubotium/test_suite'
 require 'rubotium/runnable_test'
@@ -16,6 +14,8 @@ require 'rubotium/memory'
 require 'rubotium/adb/parsers/procrank'
 require 'rubotium/test_runners/instrumentation_test_runner'
 require 'rubotium/test_results'
+require 'rubotium/test_cases_reader'
+require 'rubotium/test_result'
 
 require 'fileutils'
 require 'mkmf'
@@ -39,7 +39,6 @@ module Rubotium
   class << self
     def new(opts = {})
       raise RuntimeError,   "Empty configuration"       if opts.empty?
-      raise NoJavapError,   "No javap tool in $PATH"    if !find_executable('javap')
       raise NoAaptError,    "No aapt tool in $PATH"     if !find_executable('aapt')
       raise Errno::ENOENT,  "Tests apk does not exist"  if !File.exist?(opts[:tests_apk_path])
       raise Errno::ENOENT,  "App apk does not exist"    if !File.exist?(opts[:app_apk_path])
@@ -53,20 +52,6 @@ module Rubotium
       application_package = Rubotium::Package.new(opts[:app_apk_path])
       tests_package       = Rubotium::Package.new(opts[:tests_apk_path], opts[:runner])
 
-      if (opts[:tests_jar_path])
-        test_suites  = JarReader.new(opts[:tests_jar_path]).get_tests
-      else
-        path_to_jar = File.join(Dir.mktmpdir, 'tests.jar')
-        begin
-          puts("Convertig dex to jar")
-          Rubotium::Apk::Converter.new(tests_package.path, path_to_jar).convert_to_jar
-          puts("Reading jar content")
-          test_suites = JarReader.new(path_to_jar).get_tests
-        ensure
-          FileUtils.remove_entry(path_to_jar)
-        end
-      end
-      puts "There are #{test_suites.count} tests to run"
       devices = Devices.new(:name => opts[:device_matcher]).all
 
       devices = Parallel.map(devices, :in_threads => devices.count) {|device|
@@ -77,7 +62,10 @@ module Rubotium
         device
       }
 
-      runner = Rubotium::TestsRunner.new(devices, test_suites, tests_package)
+      test_suites = Rubotium::TestCasesReader.new(devices.first, tests_package).read_tests
+      puts "There are #{test_suites.count} tests to run"
+
+      runner = Rubotium::TestsRunner.new(devices, test_suites, tests_package, {:annotation=>opts[:annotation]})
       runner.run_tests
 
       FileUtils.mkdir_p(['screens', 'logs'])

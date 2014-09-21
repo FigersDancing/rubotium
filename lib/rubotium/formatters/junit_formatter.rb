@@ -40,7 +40,7 @@ module Rubotium
         end
 
         def print_testcase(test)
-          xml.testcase(:classname=> test.package_name, :name=>test.test_name, :time=>test.time) do
+          xml.testcase(:classname=> test.class_name, :name=>test.test_name, :time=>test.time) do
             has_failures(test)
             has_errors(test)
           end

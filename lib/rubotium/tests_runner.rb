@@ -30,7 +30,10 @@ module Rubotium
           memory_monitor = Rubotium::Memory::Monitor.new(device, { :interval => 1 })
           memory_monitor.start
           display_test_progress
-          results.push(test_runner(device).run_test(test))
+          if(result = test_runner(device).run_test(test)).failed?
+            result = test_runner(device).run_test(test)
+          end
+          results.push(result)
           memory_monitor.stop_and_save(memory_results_file(test))
         end
       }

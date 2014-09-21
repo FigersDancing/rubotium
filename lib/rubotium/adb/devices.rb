@@ -10,7 +10,7 @@ module Rubotium
 
       private
       def create_device(device_serial)
-        Device.new(device_serial, Adb::Instrumentation.new(device_serial))
+        Device.new(device_serial)
       end
 
       def adb_devices_command

@@ -4,7 +4,7 @@ describe Rubotium::TestsRunner do
   let(:device1) { double('Device1') }
   let(:device2) { double('Device2') }
   let(:devices) { [device1, device2] }
-  let(:tests) { (0..10).to_a.map{|elem| RunnableTest.new("package#{elem}", "name#{elem}")} }
+  let(:tests) { (0..10).to_a.map{|elem| Rubotium::RunnableTest.new("package#{elem}", "name#{elem}")} }
   let(:test_runner) { double(Rubotium::TestRunners::InstrumentationTestRunner) }
   let(:test_package) { double(Rubotium::Package) }
 
