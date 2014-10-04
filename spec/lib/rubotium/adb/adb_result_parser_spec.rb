@@ -2,9 +2,10 @@ require 'spec_helper'
 
 describe Rubotium::Adb::TestResultParser do
   let(:parser) { described_class }
+  let(:package) { double(Rubotium::Package, :package_name=> 'name', :test_name=> 'test_name')}
 
   context 'failed test' do
-    let(:parsed_result) { parser.new(Fixtures::Adb.test_failure, "", "") }
+    let(:parsed_result) { parser.new(Fixtures::Adb.test_failure, package, "") }
 
     it 'should not be passed' do
       parsed_result.should_not be_passed
@@ -32,7 +33,7 @@ describe Rubotium::Adb::TestResultParser do
   end
 
   context 'passed test' do
-    let(:parsed_result) { parser.new(Fixtures::Adb.test_success, "", "") }
+    let(:parsed_result) { parser.new(Fixtures::Adb.test_success, package, "") }
 
     it 'should be passed' do
       parsed_result.should be_passed
@@ -60,7 +61,7 @@ describe Rubotium::Adb::TestResultParser do
   end
 
   context 'error in test' do
-    let(:parsed_result) { parser.new(Fixtures::Adb.test_error, "", "") }
+    let(:parsed_result) { parser.new(Fixtures::Adb.test_error, package, "") }
 
     it 'should not be passed' do
       parsed_result.should_not be_passed
@@ -88,7 +89,7 @@ describe Rubotium::Adb::TestResultParser do
   end
 
   context 'run error' do
-    let(:parsed_result) { parser.new(Fixtures::Adb.test_run_error, "", "") }
+    let(:parsed_result) { parser.new(Fixtures::Adb.test_run_error, package, "") }
 
     it 'should not be passed' do
       parsed_result.should_not be_passed
@@ -115,7 +116,7 @@ describe Rubotium::Adb::TestResultParser do
     end
   end
   context 'passed tests with negative time' do
-    let(:parsed_result) { parser.new(Fixtures::Adb.passed_negative_time, "", "") }
+    let(:parsed_result) { parser.new(Fixtures::Adb.passed_negative_time, package, "") }
 
     it 'should not be passed' do
       parsed_result.time.should == 53.656
@@ -123,7 +124,7 @@ describe Rubotium::Adb::TestResultParser do
   end
 
   context 'system crash' do
-    let(:parsed_result) { parser.new(Fixtures::Adb.system_crash, "", "") }
+    let(:parsed_result) { parser.new(Fixtures::Adb.system_crash, package, "") }
 
     it 'should know the error reason' do
       parsed_result.error_message.should == "System has crashed.\r"
@@ -131,13 +132,15 @@ describe Rubotium::Adb::TestResultParser do
   end
 
   context 'command_timeout' do
-    let(:parsed_result) { parser.new(Fixtures::Adb.gingerbread_exception, "", "") }
+    let(:parsed_result) { parser.new(Fixtures::Adb.gingerbread_exception, package, "") }
 
     it 'should behave as error case' do
+      pending
       parsed_result.should be_errored
     end
 
     it 'should know the error reason' do
+      pending
       parsed_result.error_message.should eql('')
     end
   end

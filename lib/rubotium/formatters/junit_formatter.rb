@@ -19,7 +19,6 @@ module Rubotium
       private
         attr_reader :report_file_path, :device_serial, :results
         def start_test_suite(package_name, tests)
-          tests.flatten!
           failures    = get_failures(tests)
           errors      = get_errors(tests)
           tests_time  = get_tests_time(tests)
@@ -41,7 +40,7 @@ module Rubotium
         end
 
         def print_testcase(test)
-          xml.testcase(:classname=> test.package_name, :name=>test.test_name, :time=>test.time) do
+          xml.testcase(:classname=> test.class_name, :name=>test.test_name, :time=>test.time) do
             has_failures(test)
             has_errors(test)
           end

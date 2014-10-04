@@ -1,0 +1,7 @@
+require_relative 'commands/command'
+require_relative 'commands/install_command'
+require_relative 'commands/instrument_command'
+require_relative 'commands/memory_command'
+require_relative 'commands/pull_command'
+require_relative 'commands/shell_command'
+require_relative 'commands/uninstall_command'
