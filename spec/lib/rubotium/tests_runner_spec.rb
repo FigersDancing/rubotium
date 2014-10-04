@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'ostruct'
 
 describe Rubotium::TestsRunner do
   let(:device1) { double('Device1') }
@@ -7,6 +8,7 @@ describe Rubotium::TestsRunner do
   let(:tests) { (0..10).to_a.map{|elem| Rubotium::RunnableTest.new("package#{elem}", "name#{elem}")} }
   let(:test_runner) { double(Rubotium::TestRunners::InstrumentationTestRunner) }
   let(:test_package) { double(Rubotium::Package) }
+  let(:successful_test) {OpenStruct.new(:failed? => false )}
 
   before do
     device1.stub(:name).and_return('device1')
@@ -21,6 +23,8 @@ describe Rubotium::TestsRunner do
       before do
         device1.stub(:shell)
         device2.stub(:shell)
+        runner.stub(:test_runner).and_return(test_runner)
+        test_runner.stub(:run_test).with(any_args).and_return(successful_test)
       end
 
       it 'runs all the tests from the queue' do
@@ -29,6 +33,7 @@ describe Rubotium::TestsRunner do
       end
 
       it 'executes tests on all devices' do
+        pending
         expect(device1).to receive(:shell).exactly(1).times.and_return { sleep 1 }
         expect(device2).to receive(:shell).exactly(10).times
         runner.run_tests

@@ -11,6 +11,10 @@ doc/
 lib/bundler/man
 pkg
 rdoc
+results
+screens
+logs
+report.xml
 spec/reports
 test/tmp
 test/version_tmp
