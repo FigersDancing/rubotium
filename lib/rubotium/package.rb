@@ -33,7 +33,7 @@ module Rubotium
     attr_reader :package_path
 
     def analyzed_package
-      @analyzed_package ||= Rubotium::Apk::AndroidApk.analyze(package_path)
+      @analyzed_package ||= Rubotium::Apk::AndroidApk.new(package_path)
     end
   end
 end

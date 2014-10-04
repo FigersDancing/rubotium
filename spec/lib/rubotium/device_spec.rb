@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Rubotium::Device do
-  let(:device)  { described_class.new('12345', nil) }
+  let(:device)  { described_class.new('12345') }
   let(:command) { double(Rubotium::Adb::Commands::Command)}
   before do
     device.stub(:adb_command).and_return(command)

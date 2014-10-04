@@ -48,12 +48,5 @@ module Rubotium
     def test_case
       parsed_result.test_results.first
     end
-
-    def create
-      p Rubotium::Adb::Parsers::TestResultsParser.new(result).test_results.first
-      p Rubotium::Adb::Parsers::TestResultsParser.new(result).test_results.first.passed?
-      p Rubotium::Adb::Parsers::TestResultsParser.new(result).test_results.first.stack_trace
-      p Rubotium::Adb::Parsers::TestResultsParser.new(result).time
-    end
   end
 end

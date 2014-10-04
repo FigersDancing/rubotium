@@ -6,8 +6,6 @@ require 'rubotium/device'
 require 'rubotium/devices'
 require 'rubotium/tests_runner'
 require 'rubotium/formatters/junit_formatter'
-require 'rubotium/test_case'
-require 'rubotium/test_suite'
 require 'rubotium/runnable_test'
 require 'rubotium/package'
 require 'rubotium/memory'
@@ -18,7 +16,6 @@ require 'rubotium/test_cases_reader'
 require 'rubotium/test_result'
 
 require 'fileutils'
-require 'mkmf'
 require 'json'
 require 'logger'
 
@@ -39,7 +36,6 @@ module Rubotium
   class << self
     def new(opts = {})
       raise RuntimeError,   "Empty configuration"       if opts.empty?
-      raise NoAaptError,    "No aapt tool in $PATH"     if !find_executable('aapt')
       raise Errno::ENOENT,  "Tests apk does not exist"  if !File.exist?(opts[:tests_apk_path])
       raise Errno::ENOENT,  "App apk does not exist"    if !File.exist?(opts[:app_apk_path])
 
@@ -48,6 +44,8 @@ module Rubotium
       startTime = Time.now
       FileUtils.mkdir_p('results')
       FileUtils.mkdir_p('results/memory_logs')
+      FileUtils.mkdir_p('screens')
+      FileUtils.mkdir_p('logs')
 
       application_package = Rubotium::Package.new(opts[:app_apk_path])
       tests_package       = Rubotium::Package.new(opts[:tests_apk_path], opts[:runner])

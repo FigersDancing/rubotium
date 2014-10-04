@@ -1,15 +1,8 @@
 module Rubotium
   class Device
-    attr_accessor :testsuite, :test_queue
-    attr_reader   :serial, :results
+    attr_reader   :serial
     def initialize(serial)
       @serial     = serial
-      @retry      = 1
-      @results    = {}
-    end
-
-    def test_runner_name= name
-      runner.test_runner = name
     end
 
     def name
@@ -33,7 +26,7 @@ module Rubotium
     end
 
     private
-    attr_reader :command, :serial
+    attr_reader :command
 
     def adb_command
       @command ||= Rubotium::Adb::Commands::Command.new(serial)

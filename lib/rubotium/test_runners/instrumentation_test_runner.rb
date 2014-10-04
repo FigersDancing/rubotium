@@ -10,7 +10,6 @@ module Rubotium
       def run_test(runnable_test)
         result = device.shell(instrument_command(runnable_test))
         Rubotium::TestResult.new(Rubotium::Adb::Parsers::TestResultsParser.new(result), runnable_test)
-        # Rubotium::Adb::TestResultParser.new(result, runnable_test, device.name)
       end
 
       private

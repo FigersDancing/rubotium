@@ -3,7 +3,7 @@ module Rubotium
     def initialize(device, test_package, options = {})
       @device         = device
       @test_package   = test_package
-      @annotations    = options.delete(:annotation)
+      @annotation     = options.delete(:annotation)
     end
 
     def read_tests
@@ -19,12 +19,14 @@ module Rubotium
 
     private
 
-    attr_reader :device, :test_package
+    attr_reader :device, :test_package, :annotation
 
     def instrument_command
-      "am instrument -w -r -e log true #{test_package.name}/#{test_package.test_runner}"
+      "am instrument -w -r -e log true #{with_annotation} #{test_package.name}/#{test_package.test_runner}"
     end
 
-
+    def with_annotation
+      annotation ? "-e annotation #{annotation}" : ''
+    end
   end
 end
