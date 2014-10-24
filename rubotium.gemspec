@@ -28,5 +28,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'builder',      '3.2.2'
   spec.add_dependency 'trollop',      '2.0'
   spec.add_dependency 'parallel',     '0.9.2'
-  spec.add_dependency 'dex2jar',      '0.0.6'
 end
