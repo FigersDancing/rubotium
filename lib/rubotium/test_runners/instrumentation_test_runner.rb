@@ -8,7 +8,11 @@ module Rubotium
       end
 
       def run_test(runnable_test)
+        device.clean_logcat
         result = device.shell(instrument_command(runnable_test))
+        File.open("results/logs/#{runnable_test.name}.log", 'w+') do |file|
+          file.write device.logcat
+        end
         Rubotium::TestResult.new(Rubotium::Adb::Parsers::TestResultsParser.new(result), runnable_test)
       end
 

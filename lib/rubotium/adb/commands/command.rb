@@ -6,6 +6,14 @@ module Rubotium
           @device_serial = device_serial
         end
 
+        def clean_logcat
+          execute(logcat_command(:clean => true))
+        end
+
+        def logcat
+          execute(logcat_command(:dump => true))
+        end
+
         def install(apk_path)
           execute(install_command(apk_path))
         end
@@ -48,6 +56,10 @@ module Rubotium
 
         def shell_command(command)
           Rubotium::Adb::Commands::ShellCommand.new(command)
+        end
+
+        def logcat_command(options = {})
+          Rubotium::Adb::Commands::LogcatCommand.new(options)
         end
       end
     end

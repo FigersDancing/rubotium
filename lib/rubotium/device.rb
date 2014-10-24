@@ -9,6 +9,14 @@ module Rubotium
       @name ||= adb_command.shell('getprop ro.product.model').strip
     end
 
+    def clean_logcat
+      adb_command.clean_logcat
+    end
+
+    def logcat
+       adb_command.logcat
+    end
+
     def install(apk_path)
       adb_command.install(apk_path)
     end

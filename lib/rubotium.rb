@@ -42,7 +42,7 @@ module Rubotium
       logger.level = Logger::INFO
 
       startTime = Time.now
-      FileUtils.mkdir_p('results')
+      FileUtils.mkdir_p('results/logs')
       FileUtils.mkdir_p('results/memory_logs')
       FileUtils.mkdir_p('screens')
       FileUtils.mkdir_p('logs')
