@@ -1,0 +1,10 @@
+.test_case {
+    padding: .5em 0 .5em 1em;
+    font-size: 120%;
+    color: #151515;
+    background-color: #f2f2f2;
+}
+
+.passed {
+    border-left: solid 10px #93e078;
+}
