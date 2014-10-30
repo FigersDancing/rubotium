@@ -26,13 +26,25 @@ module Rubotium
           execute(pull_command(files_glob))
         end
 
+        def push(local_glob, remote_dest)
+          execute(push_command(local_glob, remote_dest))
+        end
+
         def shell(command)
           execute(shell_command(command))
         end
 
         def execute(command_to_run)
-          puts "EXECUTING_COMMAND: #{adb_command} #{command_to_run.executable_command}"
-          CMD.run_command(adb_command + " " + command_to_run.executable_command)
+          commands = command_to_run.executable_command
+          puts "EXECUTING_COMMAND: #{adb_command} #{commands}"
+
+          begin
+            commands.each do |command|
+              CMD.run_command(adb_command + ' ' + command)
+            end
+          rescue NoMethodError
+            CMD.run_command(adb_command + ' ' + commands)
+          end
         end
 
         private
@@ -52,6 +64,10 @@ module Rubotium
 
         def pull_command(files_glob)
           Rubotium::Adb::Commands::PullCommand.new(files_glob)
+        end
+
+        def push_command(local_glob, remote_dest)
+          Rubotium::Adb::Commands::PushCommand.new(local_glob, remote_dest)
         end
 
         def shell_command(command)
