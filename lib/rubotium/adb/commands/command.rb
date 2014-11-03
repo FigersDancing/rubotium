@@ -31,7 +31,11 @@ module Rubotium
         attr_reader :device_serial
 
         def adb_command
-          "adb -s #{device_serial} "
+          if device_serial.nil? || device_serial == ''
+            'adb'
+          else
+            "adb -s #{device_serial}"
+          end
         end
 
         def install_command(apk_path)
