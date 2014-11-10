@@ -1,12 +1,6 @@
 require 'spec_helper'
 
-describe Rubotium::Device do
-  let(:device)  { described_class.new('12345') }
-  let(:command) { double(Rubotium::Adb::Commands::Command)}
-  before do
-    device.stub(:adb_command).and_return(command)
-  end
-
+shared_examples 'a Rubotium::Device' do
   it 'installs package on device' do
     path_to_apk = 'path/to/apk'
     expect(command).to receive(:install).with(path_to_apk)
@@ -34,5 +28,26 @@ describe Rubotium::Device do
     getprop = 'getprop ro.product.model'
     expect(command).to receive(:shell).with(getprop)
     device.shell(getprop)
+  end
+end
+
+describe Rubotium::Device do
+  let(:device)  { described_class.new(serial) }
+  let(:command) { double(Rubotium::Adb::Commands::Command)}
+
+  before do
+    device.stub(:adb_command).and_return(command)
+  end
+
+  context 'when a serial is provided' do
+    let(:serial) { '12345' }
+
+    it_behaves_like 'a Rubotium::Device'
+  end
+
+  context 'when no serial is provided' do
+    let(:serial) { nil }
+
+    it_behaves_like 'a Rubotium::Device'
   end
 end
