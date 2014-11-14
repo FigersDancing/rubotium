@@ -15,7 +15,7 @@ module Rubotium
     end
 
     def tests_to_execute
-      tests_queue.count
+        tests_queue.count
     end
 
     def tests_results
@@ -32,7 +32,10 @@ module Rubotium
           display_test_progress
           result = test_runner(device).run_test(test)
           if(result.failed? || result.errored?)
+            screencast = Rubotium::Recorder.new(device.serial)
+            screencast.start(test.name)
             result = test_runner(device).run_test(test)
+            screencast.stop
           end
           results.push(result)
           memory_monitor.stop_and_save(memory_results_file(test))
