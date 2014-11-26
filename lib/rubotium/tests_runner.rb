@@ -25,8 +25,7 @@ module Rubotium
     def run_tests
       fill_tests_queue
       Parallel.each(devices, :in_threads => devices.count) { |device|
-        until tests_queue.empty?
-          test = next_test
+        while(test = next_test)
           memory_monitor = Rubotium::Memory::Monitor.new(device, { :interval => 1 })
           memory_monitor.start
           display_test_progress
@@ -61,7 +60,7 @@ module Rubotium
     end
 
     def next_test
-      tests_queue.pop
+      tests_queue.pop(true) rescue nil
     end
 
     def fill_tests_queue
