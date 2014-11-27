@@ -1,3 +1,5 @@
+require 'time'
+
 module Rubotium
   module Adb
     module Parsers
@@ -31,7 +33,7 @@ module Rubotium
         end
 
         def time
-          match_time.strip
+          match_time.strip.to_i
         end
 
         def message

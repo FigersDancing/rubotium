@@ -9,6 +9,10 @@ module Rubotium
       @test_name      = runnable_test.test_name
     end
 
+    def name
+      "#{class_name}##{test_name}"
+    end
+
     def stack_trace
       if(failed_run?)
         parsed_result.message

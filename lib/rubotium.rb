@@ -6,6 +6,8 @@ require 'rubotium/device'
 require 'rubotium/devices'
 require 'rubotium/tests_runner'
 require 'rubotium/formatters/junit_formatter'
+require 'rubotium/screencast'
+require 'rubotium/formatters/html_formatter'
 require 'rubotium/runnable_test'
 require 'rubotium/package'
 require 'rubotium/memory'
@@ -44,23 +46,32 @@ module Rubotium
       startTime = Time.now
       FileUtils.mkdir_p('results/logs')
       FileUtils.mkdir_p('results/memory_logs')
+      FileUtils.mkdir_p('results/screencasts')
       FileUtils.mkdir_p('screens')
       FileUtils.mkdir_p('logs')
 
       application_package = Rubotium::Package.new(opts[:app_apk_path])
       tests_package       = Rubotium::Package.new(opts[:tests_apk_path], opts[:runner])
 
-      devices = Devices.new(:name => opts[:device_matcher]).all
+      devices = Devices.new(:name => opts[:device_matcher], :sdk => opts[:device_sdk]).all
 
       devices = Parallel.map(devices, :in_threads => devices.count) {|device|
-        device.uninstall application_package.name
-        device.install application_package.path
-        device.uninstall tests_package.name
-        device.install tests_package.path
+        # device.uninstall application_package.name
+        # device.install application_package.path
+        # device.uninstall tests_package.name
+        # device.install tests_package.path
+        device.shell('mkdir /sdcard/screencasts')
         device
       }
 
-      test_suites = Rubotium::TestCasesReader.new(devices.first, tests_package).read_tests
+      test_suites = [
+        Rubotium::RunnableTest.new("com.soundcloud.android.tests.widget.WidgetLinksTest", "testOpenAppFromWidgetWithUserShowsStreamScreen"),
+        Rubotium::RunnableTest.new("com.soundcloud.android.tests.widget.WidgetLinksTest", "testOpenAppFromWidgetWithUserShowsStreamScreen"),
+        Rubotium::RunnableTest.new("com.soundcloud.android.tests.whoToFollow.WhoToFollowTest", "testCheckmarkSelection"),
+
+        Rubotium::RunnableTest.new("a", "C"),
+        Rubotium::RunnableTest.new("d", "E")
+      ]#Rubotium::TestCasesReader.new(devices.first, tests_package).read_tests
       puts "There are #{test_suites.count} tests to run"
 
       runner = Rubotium::TestsRunner.new(devices, test_suites, tests_package, {:annotation=>opts[:annotation]})
@@ -71,16 +82,19 @@ module Rubotium
       devices.each{|device|
         device.pull('/sdcard/Robotium-Screenshots')
         device.pull('/sdcard/RobotiumLogs')
-        device.shell('rm -R /sdcard/Robotium-Screenshots ')
-        device.shell('rm -R /sdcard/RobotiumLogs ')
+        device.pull('/sdcard/screencasts')
+        device.shell('rm -R /sdcard/Robotium-Screenshots')
+        device.shell('rm -R /sdcard/RobotiumLogs')
+        device.shell('rm -R /sdcard/screencasts')
       }
       FileUtils.mv(Dir.glob('*.jpg'), 'screens')
       FileUtils.mv(Dir.glob('*.log'), 'logs')
+      FileUtils.mv(Dir.glob('*.mp4'), 'results/screencasts')
 
       puts "Tests took: #{Time.at(Time.now-startTime).utc.strftime("%H:%M:%S")}"
 
       Formatters::JunitFormatter.new(runner.tests_results.group_by_package, opts[:report])
-
+      Formatters::HtmlFormatter.new(runner.tests_results.group_by_failures, 'results/index.html')
     end
 
     def logger

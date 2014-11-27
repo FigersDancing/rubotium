@@ -10,6 +10,7 @@ opts = Trollop::options do
     opt :rerun,           'Retries count',                :default  => 0,             :short  =>  '-R'
     opt :out,             'Report file',                  :default  => 'report.xml',  :short  =>  '-o'
     opt :device,          'Match devices',                :type     => :string,       :short  =>  '-d'
+    opt :sdk,             'Run on devices with sdk',      :type     => :string,       :short  =>  '-k'
     opt :runner,          'Test runner',                  :type     => :string,       :short  =>  '-r'
     opt :annotation,      'Run annotated tests',          :type     => :string,       :short  =>  '-n'
 end
@@ -21,6 +22,7 @@ params = {
     :rerun_count        => opts[:rerun],
     :report             => opts[:out],
     :device_matcher     => opts[:device],
+    :device_sdk         => opts[:sdk],
     :runner             => opts[:runner],
     :annotation         => opts[:annotation]
 }

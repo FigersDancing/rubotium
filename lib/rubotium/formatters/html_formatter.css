@@ -1,10 +1,82 @@
+body {
+    margin: 0 auto;
+    padding: 0;
+    text-align: left;
+    height: 100%;
+    font-family: myriad, arial, tahoma, verdana, sans-serif;
+    color: #151515;
+    font-size: 90%;
+    line-height: 1.3em;
+    background-color: #fff;
+}
+
+ul {
+    list-style: none;
+}
+
+#header {
+    padding: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    background-color: #c7ceda;
+}
+
+#header .time {
+    margin-top: 2.2em;
+    margin-right: 3.4em;
+    float: right;
+}
+
+#header h1 {
+    margin: 1em 3em 1em 1.7em;
+    color: #151515;
+    font-size: 180%;
+    line-height: 1.1em;
+    font-weight: bold;
+}
+
+.testsuite > div {
+    padding: .5em 0 .5em 1em;
+    background-color: #f2f2f2;
+    font-size: 120%;
+    color: #151515;
+    font-weight: bold;
+}
+
+span.error {
+    color: #ff0000;
+}
+
+span.passed {
+    color: #1d9d01;
+}
+
+#content {
+    padding: 112px 2.5em 2em 1.7em;
+}
+
 .test_case {
     padding: .5em 0 .5em 1em;
     font-size: 120%;
     color: #151515;
-    background-color: #f2f2f2;
+    border-bottom: solid 1px #dbdbdb;
 }
 
-.passed {
+#testsuites .passed {
     border-left: solid 10px #93e078;
+}
+
+#testsuites .failed {
+    border-left: solid 10px #ff0000;
+}
+
+.stderr {
+    color: #8b0000 !important;
+    font-size: 80% !important;
+    font-weight: normal !important;
+    overflow-x: auto;
+    cursor: auto !important;
+    background: none !important;
+    border: none !important;
 }
