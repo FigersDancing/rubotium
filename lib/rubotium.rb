@@ -56,21 +56,17 @@ module Rubotium
       devices = Devices.new(:name => opts[:device_matcher], :sdk => opts[:device_sdk]).all
 
       devices = Parallel.map(devices, :in_threads => devices.count) {|device|
-        # device.uninstall application_package.name
-        # device.install application_package.path
-        # device.uninstall tests_package.name
-        # device.install tests_package.path
+        device.uninstall application_package.name
+        device.install application_package.path
+        device.uninstall tests_package.name
+        device.install tests_package.path
         device.shell('mkdir /sdcard/screencasts')
         device
       }
 
       test_suites = [
-        Rubotium::RunnableTest.new("com.soundcloud.android.tests.widget.WidgetLinksTest", "testOpenAppFromWidgetWithUserShowsStreamScreen"),
-        Rubotium::RunnableTest.new("com.soundcloud.android.tests.widget.WidgetLinksTest", "testOpenAppFromWidgetWithUserShowsStreamScreen"),
-        Rubotium::RunnableTest.new("com.soundcloud.android.tests.whoToFollow.WhoToFollowTest", "testCheckmarkSelection"),
-
-        Rubotium::RunnableTest.new("a", "C"),
-        Rubotium::RunnableTest.new("d", "E")
+        Rubotium::RunnableTest.new("a", "B"),
+        Rubotium::RunnableTest.new("a", "")
       ]#Rubotium::TestCasesReader.new(devices.first, tests_package).read_tests
       puts "There are #{test_suites.count} tests to run"
 
@@ -94,7 +90,7 @@ module Rubotium
       puts "Tests took: #{Time.at(Time.now-startTime).utc.strftime("%H:%M:%S")}"
 
       Formatters::JunitFormatter.new(runner.tests_results.group_by_package, opts[:report])
-      Formatters::HtmlFormatter.new(runner.tests_results.group_by_failures, 'results/index.html')
+      Formatters::HtmlFormatter.new(runner.tests_results.group_by_package, 'results/index.html')
     end
 
     def logger
