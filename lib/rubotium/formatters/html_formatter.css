@@ -35,6 +35,9 @@ ul {
     line-height: 1.1em;
     font-weight: bold;
 }
+.testsuite {
+    margin: 5px;
+}
 
 .testsuite > div {
     padding: .5em 0 .5em 1em;
@@ -56,11 +59,23 @@ span.passed {
     padding: 112px 2.5em 2em 1.7em;
 }
 
-.test_case {
+.test_case > div{
     padding: .5em 0 .5em 1em;
-    font-size: 120%;
-    color: #151515;
+    color: #0046b0;
+    font-size: 100%;
+    font-weight: bold;
     border-bottom: solid 1px #dbdbdb;
+}
+
+.test_case .time {
+    margin-right: .5em;
+    width: 5em;
+    text-align: right;
+    font-size: 13px;
+    color: #151515;
+    font-style: normal;
+    font-weight: normal;
+    float: right;
 }
 
 #testsuites .passed {
