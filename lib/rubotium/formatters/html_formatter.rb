@@ -39,24 +39,19 @@ module Rubotium
           html.strong do
             html.span("#{test_results.total} total,")
             html.span("#{test_results.passed} passed,", { :class => 'passed' })
-            html.span("#{test_results.errored} errored,", { :class => 'error' }) if test_results.errored
-            html.span("#{test_results.failed} failed", { :class => 'fail' }) if test_results.failed
+            html.span("#{test_results.failed} failed", { :class => 'error' }) if test_results.failed
+
           end
         end
       end
 
       def display_time
-        html.div(test_results.time, { :class => 'time' })
+        html.div(format_time(test_results.time.to_i), { :class => 'time' })
       end
 
       def add_body
         html.body do
           add_content
-          html.ul(:id => 'testsuites') do
-            test_results.each{|suite|
-              start_test_suite(suite)
-            }
-          end
         end
       end
 
@@ -66,7 +61,11 @@ module Rubotium
 
       def add_content
         html.div(:id => 'content') do
-
+          html.ul(:id => 'testsuites') do
+            test_results.each{|suite|
+              start_test_suite(suite)
+            }
+          end
         end
       end
 
@@ -93,6 +92,16 @@ module Rubotium
         File.open(path_to_file, 'w')
       end
 
+      def format_time(seconds)
+        return '0 s' if seconds == 0
+        [[60, :s], [60, :m], [24, :h]].map{ |count, name|
+          if seconds > 0
+            seconds, n = seconds.divmod(count)
+            "#{n.to_i} #{name}"
+          end
+        }.compact.reverse.join(' ')
+      end
+
       class TestCaseHtml
         def initialize(test_result)
           @test_result = test_result
@@ -110,9 +119,11 @@ module Rubotium
           builder.li(:class => 'test_case') do
             print_name
             builder.ul do
-              print_stacktrace if test_result.failed?
-              print_logcat if test_result.failed?
-              print_screen_record if File.exist?(File.join(Dir.pwd, 'results', video_file))
+              unless test_result.passed?
+                print_stacktrace
+                print_logcat
+                print_screen_record if File.exist?(File.join(Dir.pwd, 'results', video_file))
+              end
             end
           end
         end
@@ -128,7 +139,7 @@ module Rubotium
 
         def print_logcat
           builder.li(:class => 'logcat') do
-            builder.a("logcat", :href => URI.encode(logcat_file))
+            builder.a("full log", :href => URI.encode(logcat_file))
           end
         end
 
@@ -141,7 +152,10 @@ module Rubotium
         end
 
         def print_name
-          builder.span(test_result.test_name)
+          builder.div(:class => test_result.passed? ? 'passed' : 'failed') do
+            builder.div(format_time(test_result.time), { :class => 'time' })
+            builder.span(test_result.test_name)
+          end
         end
 
         def logcat_file
@@ -150,6 +164,16 @@ module Rubotium
 
         def video_file
           "screencasts/#{test_result.name}.mp4"
+        end
+
+        def format_time(seconds)
+          return '0 s' if seconds == 0
+          [[60, :s], [60, :m], [24, :h]].map{ |count, name|
+            if seconds > 0
+              seconds, n = seconds.divmod(count)
+              "#{n.to_i} #{name}"
+            end
+          }.compact.reverse.join(' ')
         end
       end
     end
