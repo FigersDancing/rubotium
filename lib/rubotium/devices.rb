@@ -17,7 +17,7 @@ module Rubotium
     attr_reader :matched, :attached_devices, :match_name, :match_serial, :match_sdk
 
     def matched_devices
-      @matched_devices ||=(matched_by_name + matched_by_serial + matched_by_sdk).uniq
+      @matched_devices ||=[matched_by_name, matched_by_serial, matched_by_sdk].reject( &:empty? ).reduce( :& )
     end
 
     def attached_devices
