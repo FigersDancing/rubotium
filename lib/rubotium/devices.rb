@@ -8,7 +8,7 @@ module Rubotium
 
     def all
       raise NoDevicesError if attached_devices.empty?
-      raise NoMatchedDevicesError if matched_devices.empty?
+      raise NoMatchedDevicesError if matched_devices.nil? or matched_devices.empty?
       matched_devices
     end
 
