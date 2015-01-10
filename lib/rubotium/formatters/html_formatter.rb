@@ -20,10 +20,10 @@ module Rubotium
       attr_reader :report_file_path, :device_serial, :test_results
 
       def inline_css
-        html.link(:rel=>"stylesheet", :href=> (File.dirname(__FILE__) + '/html_formatter.css'))
-        # html.style(:type => 'text/css') do
-        #   html << File.read(File.dirname(__FILE__) + '/html_formatter.css')
-        # end
+        # html.link(:rel=>"stylesheet", :href=> (File.dirname(__FILE__) + '/html_formatter.css'))
+        html.style(:type => 'text/css') do
+          html << File.read(File.dirname(__FILE__) + '/html_formatter.css')
+        end
       end
 
       def add_header

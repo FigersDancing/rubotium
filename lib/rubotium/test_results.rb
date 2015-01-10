@@ -17,6 +17,8 @@ module Rubotium
       TestSuites.new(
       group_by_package.map{|name, test_results|
         TestSuite.new(name, test_results)
+      }.sort_by{|test_suite|
+        test_suite.state
       })
     end
 
