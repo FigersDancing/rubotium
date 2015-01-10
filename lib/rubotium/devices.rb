@@ -8,7 +8,7 @@ module Rubotium
 
     def all
       raise NoDevicesError if attached_devices.empty?
-      raise NoMatchedDevicesError if matched_devices.empty?
+      raise NoMatchedDevicesError if matched_devices.nil? or matched_devices.empty?
       matched_devices
     end
 
@@ -17,7 +17,7 @@ module Rubotium
     attr_reader :matched, :attached_devices, :match_name, :match_serial, :match_sdk
 
     def matched_devices
-      @matched_devices ||=(matched_by_name + matched_by_serial + matched_by_sdk).uniq
+      @matched_devices ||=[matched_by_name, matched_by_serial, matched_by_sdk].reject( &:empty? ).reduce( :& )
     end
 
     def attached_devices
