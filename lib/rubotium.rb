@@ -64,10 +64,8 @@ module Rubotium
         device
       }
 
-      test_suites = [
-        Rubotium::RunnableTest.new("a", "B"),
-        Rubotium::RunnableTest.new("a", "")
-      ]#Rubotium::TestCasesReader.new(devices.first, tests_package).read_tests
+      test_suites = Rubotium::TestCasesReader.new(devices.first, tests_package, { :annotation=>opts[:annotation]}).read_tests
+
       puts "There are #{test_suites.count} tests to run"
 
       runner = Rubotium::TestsRunner.new(devices, test_suites, tests_package, {:annotation=>opts[:annotation]})
@@ -90,7 +88,7 @@ module Rubotium
       puts "Tests took: #{Time.at(Time.now-startTime).utc.strftime("%H:%M:%S")}"
 
       Formatters::JunitFormatter.new(runner.tests_results.group_by_package, opts[:report])
-      Formatters::HtmlFormatter.new(runner.tests_results.group_by_package, 'results/index.html')
+      Formatters::HtmlFormatter.new(runner.tests_results.group_by_failures, 'results/index.html')
     end
 
     def logger
