@@ -40,6 +40,9 @@ module Rubotium
       raise RuntimeError,   "Empty configuration"       if opts.empty?
       raise Errno::ENOENT,  "Tests apk does not exist"  if !File.exist?(opts[:tests_apk_path])
       raise Errno::ENOENT,  "App apk does not exist"    if !File.exist?(opts[:app_apk_path])
+      if !opts[:helper_apk_path].nil?
+        raise Errno::ENOENT,  "Helper apk does not exist" if !File.exist?(opts[:helper_apk_path])
+      end
 
       logger.level = Logger::INFO
 
