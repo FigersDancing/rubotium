@@ -55,6 +55,7 @@ module Rubotium
 
       application_package = Rubotium::Package.new(opts[:app_apk_path])
       tests_package       = Rubotium::Package.new(opts[:tests_apk_path], opts[:runner])
+      helper_package      = Rubotium::Package.new(opts[:helper_apk_path])
 
       devices = Devices.new(:name => opts[:device_matcher], :sdk => opts[:device_sdk]).all
 
@@ -63,6 +64,10 @@ module Rubotium
         device.install application_package.path
         device.uninstall tests_package.name
         device.install tests_package.path
+        if !opts[:helper_apk_path].nil?
+          device.uninstall helper_package.name
+          device.install helper_package.path
+        end
         device.shell('mkdir /sdcard/screencasts')
         device
       }
