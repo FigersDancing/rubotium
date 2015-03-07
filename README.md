@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/ssmiech/rubotium/badges/gpa.svg)](https://codeclimate.com/github/ssmiech/rubotium)
+
 # Rubotium
 
 This is an Android's Instrumentation test runner. It's in quite early phase but already solves couple of issues with instrumentation tests: 
