@@ -14,9 +14,11 @@ opts = Trollop::options do
     opt :runner,          'Test runner',                  :type     => :string,       :short  =>  '-r'
     opt :annotation,      'Run annotated tests',          :type     => :string,       :short  =>  '-n'
     opt :helper_apk_path, 'Path to the helper .apk file', :type     => :string,       :short  =>  '-H'
+    opt :serial,          'Device serial',                :type     => :string,       :short  =>  '-s'
 end
 
 params = {
+    :serial             => opts[:serial],
     :tests_jar_path     => opts[:test_jar_path],
     :tests_apk_path     => opts[:test_apk_path],
     :app_apk_path       => opts[:app_apk_path],

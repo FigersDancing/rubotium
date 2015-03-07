@@ -57,7 +57,7 @@ module Rubotium
       tests_package       = Rubotium::Package.new(opts[:tests_apk_path], opts[:runner])
       helper_package      = Rubotium::Package.new(opts[:helper_apk_path])
 
-      devices = Devices.new(:name => opts[:device_matcher], :sdk => opts[:device_sdk]).all
+      devices = Devices.new(:name => opts[:device_matcher], :sdk => opts[:device_sdk], :serial=> opts[:serial]).all
 
       devices = Parallel.map(devices, :in_threads => devices.count) {|device|
         device.uninstall application_package.name
