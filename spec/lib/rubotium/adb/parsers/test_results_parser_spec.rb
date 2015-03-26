@@ -13,7 +13,7 @@ describe Rubotium::Adb::Parsers::TestResultsParser do
     end
 
     it 'should return time' do
-      expect(parser.time).to eql('0.142')
+      expect(parser.time).to eql(0.142)
     end
 
     it 'should not have error message' do
@@ -33,7 +33,7 @@ describe Rubotium::Adb::Parsers::TestResultsParser do
     end
 
     it 'should return time' do
-      expect(parser.time).to eql('16.79')
+      expect(parser.time).to eql(16.79)
     end
 
     it 'should not have error message' do
@@ -53,7 +53,7 @@ describe Rubotium::Adb::Parsers::TestResultsParser do
     end
 
     it 'should return time = 0' do
-      expect(parser.time).to eql('0')
+      expect(parser.time).to eql(0.0)
     end
 
     it 'should return error message' do
@@ -75,7 +75,7 @@ describe Rubotium::Adb::Parsers::TestResultsParser do
     end
 
     it 'should return time = 0' do
-      expect(parser.time).to eql('0')
+      expect(parser.time).to eql(0.0)
     end
 
     it 'should return error message' do
@@ -97,7 +97,7 @@ describe Rubotium::Adb::Parsers::TestResultsParser do
     end
 
     it 'should return time = 0' do
-      expect(parser.time).to eql('0')
+      expect(parser.time).to eql(0.0)
     end
 
     it 'should return error message' do

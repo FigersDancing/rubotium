@@ -12,6 +12,9 @@ module Rubotium
       end
 
       def package_name
+        if parsed_aapt['package'].nil?
+          raise RuntimeError.new('ERROR: dump failed because no AndroidManifest.xml found')
+        end
         parsed_aapt['package']['name']
       end
 

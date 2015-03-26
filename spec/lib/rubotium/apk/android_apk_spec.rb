@@ -22,7 +22,7 @@ describe Rubotium::Apk::AndroidApk do
     let(:apk) { described_class.new(dummy_file_path) }
 
     it 'should raise exception' do
-      expect{apk.package_name}.to raise_error(RuntimeError, /ERROR: dump failed because no AndroidManifest.xml found/)
+      expect{apk.package_name}.to raise_error(RuntimeError)
     end
   end
 
