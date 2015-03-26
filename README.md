@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/ssmiech/rubotium.svg?branch=master)](https://travis-ci.org/ssmiech/rubotium)
 [![Code Climate](https://codeclimate.com/github/ssmiech/rubotium/badges/gpa.svg)](https://codeclimate.com/github/ssmiech/rubotium)
+[![Coverage Status](https://coveralls.io/repos/ssmiech/rubotium/badge.svg?branch=master)](https://coveralls.io/r/ssmiech/rubotium?branch=master)
 
 # Rubotium
 
