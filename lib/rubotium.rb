@@ -76,7 +76,7 @@ module Rubotium
 
       puts "There are #{test_suites.count} tests to run"
 
-      runner = Rubotium::TestsRunner.new(devices, test_suites, tests_package, {:annotation=>opts[:annotation]})
+      runner = Rubotium::TestsRunner.new(devices, test_suites, tests_package, {annotation: opts[:annotation], clear: application_package.name})
       runner.run_tests
 
       FileUtils.mkdir_p(['screens', 'logs'])
@@ -88,6 +88,7 @@ module Rubotium
         device.shell('rm -R /sdcard/Robotium-Screenshots')
         device.shell('rm -R /sdcard/RobotiumLogs')
         device.shell('rm -R /sdcard/screencasts')
+        device.shell('reboot')
       }
       FileUtils.mv(Dir.glob('*.jpg'), 'screens')
       FileUtils.mv(Dir.glob('*.log'), 'logs')
