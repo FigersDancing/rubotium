@@ -5,8 +5,10 @@ module Rubotium
     require "tmpdir"
     require "pp"
     class AndroidApk
+      attr_reader :aapt
       attr_accessor :results,:label,:labels,:icon,:icons,:package_name,:version_code,:version_name,:sdk_version,:target_sdk_version,:filepath
-      def initialize(path_to_apk)
+      def initialize(aapt = Aapt.new, path_to_apk)
+        @aapt = aapt
         @path = path_to_apk
         raise(Errno::ENOENT, "File does not exist") unless File.exist?(@path)
       end
@@ -23,12 +25,11 @@ module Rubotium
       end
 
       def results
-        command = "aapt dump badging \"" + @path + "\" 2>&1"
-        results = `#{command}`
-        if $?.exitstatus != 0 or results.index("ERROR: dump failed")
-          raise(RuntimeError, results)
+        @results ||= aapt.dump(@path)
+        if $?.exitstatus != 0 or @results.index("ERROR: dump failed")
+          raise(RuntimeError, @results)
         end
-        @results ||= results
+        @results
       end
 
       def parsed_aapt
