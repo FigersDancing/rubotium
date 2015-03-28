@@ -38,7 +38,7 @@ ERROR: dump failed because assets could not be loaded"
 sdkVersion:'7'
 targetSdkVersion:'15'
 application-label:'sample'
-application-label-ja:'サンプル'
+application-label-ja:'g'
 application-icon-160:'res/drawable-mdpi/ic_launcher.png'
 application-icon-240:'res/drawable-hdpi/ic_launcher.png'
 application-icon-320:'res/drawable-xhdpi/ic_launcher.png'
