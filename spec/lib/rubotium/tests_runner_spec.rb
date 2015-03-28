@@ -21,6 +21,7 @@ describe Rubotium::TestsRunner do
 
     context 'when running tests' do
       before do
+        runner.stub(:memory_results_file).and_return Tempfile.new('memory_monitor')
         device1.stub(:shell)
         device2.stub(:shell)
         runner.stub(:test_runner).and_return(test_runner)
