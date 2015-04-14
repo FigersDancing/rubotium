@@ -14,7 +14,7 @@ module Rubotium
       end
 
       def adb_devices_command
-        CMD.run_command('adb devices', { :timeout => 5 } )
+        CMD.run_command('adb devices', { :timeout => 5 } ).result
       end
 
       def parse
