@@ -10,12 +10,16 @@ module Fixtures
           "List of devices attached \nemulator-5554\tdevice\nemulator-5556\tdevice\n\n"
         end
 
-        def one_device_offline
+        def one_device_attached_and_offline
           "List of devices attached \nemulator-5554\toffline\n\n"
         end
 
-        def one_device
+        def one_device_attached
           "List of devices attached \nemulator-5554\tdevice\n\n"
+        end
+
+        def no_devices_attached
+          "List of devices attached \n\n"
         end
       end
     end

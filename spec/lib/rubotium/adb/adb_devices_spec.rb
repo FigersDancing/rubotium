@@ -9,9 +9,9 @@ describe Rubotium::Adb::Devices do
     }
   end
 
-  context 'with one device attached' do
+  context 'when one device is attached' do
     before do
-      Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.one_device)
+      Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.one_device_attached)
     end
 
     it 'should return one device' do
@@ -32,7 +32,7 @@ describe Rubotium::Adb::Devices do
     end
   end
 
-  context 'with offline devices' do
+  context 'when two devices are attached and one is offline' do
     before do
       Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.two_devices_attached_one_is_offline)
     end
@@ -45,11 +45,24 @@ describe Rubotium::Adb::Devices do
     end
   end
 
-  context 'with no devices attached' do
+  context 'when one device is attached and offline' do
     before do
-      Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.one_device_offline)
+      Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.one_device_attached_and_offline)
     end
+    it 'should return zero devices if none are online' do
+      devices.attached.should == []
+    end
+  end
+
+  context 'when no devices are attached' do
+    it 'should run adb_devices_command 5 times' do
+      devices.should_receive(:adb_devices_command).exactly(5).times
+          .and_return(Fixtures::Adb::Devices.no_devices_attached)
+      devices.attached
+    end
+
     it 'should return zero devices if none are attached' do
+      Rubotium::CMD.stub(:run_command).and_return(Fixtures::Adb::Devices.no_devices_attached)
       devices.attached.should == []
     end
   end
