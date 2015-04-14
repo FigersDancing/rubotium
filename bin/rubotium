@@ -13,9 +13,12 @@ opts = Trollop::options do
     opt :sdk,             'Run on devices with sdk',      :type     => :string,       :short  =>  '-k'
     opt :runner,          'Test runner',                  :type     => :string,       :short  =>  '-r'
     opt :annotation,      'Run annotated tests',          :type     => :string,       :short  =>  '-n'
+    opt :helper_apk_path, 'Path to the helper .apk file', :type     => :string,       :short  =>  '-H'
+    opt :serial,          'Device serial',                :type     => :string,       :short  =>  '-s'
 end
 
 params = {
+    :serial             => opts[:serial],
     :tests_jar_path     => opts[:test_jar_path],
     :tests_apk_path     => opts[:test_apk_path],
     :app_apk_path       => opts[:app_apk_path],
@@ -24,7 +27,8 @@ params = {
     :device_matcher     => opts[:device],
     :device_sdk         => opts[:sdk],
     :runner             => opts[:runner],
-    :annotation         => opts[:annotation]
+    :annotation         => opts[:annotation],
+    :helper_apk_path    => opts[:helper_apk_path]
 }
 
 Rubotium.new(params)

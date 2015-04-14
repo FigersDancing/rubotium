@@ -40,6 +40,9 @@ module Rubotium
       raise RuntimeError,   "Empty configuration"       if opts.empty?
       raise Errno::ENOENT,  "Tests apk does not exist"  if !File.exist?(opts[:tests_apk_path])
       raise Errno::ENOENT,  "App apk does not exist"    if !File.exist?(opts[:app_apk_path])
+      if !opts[:helper_apk_path].nil?
+        raise Errno::ENOENT,  "Helper apk does not exist" if !File.exist?(opts[:helper_apk_path])
+      end
 
       logger.level = Logger::INFO
 
@@ -52,14 +55,19 @@ module Rubotium
 
       application_package = Rubotium::Package.new(opts[:app_apk_path])
       tests_package       = Rubotium::Package.new(opts[:tests_apk_path], opts[:runner])
+      helper_package      = Rubotium::Package.new(opts[:helper_apk_path])
 
-      devices = Devices.new(:name => opts[:device_matcher], :sdk => opts[:device_sdk]).all
+      devices = Devices.new(:name => opts[:device_matcher], :sdk => opts[:device_sdk], :serial=> opts[:serial]).all
 
       devices = Parallel.map(devices, :in_threads => devices.count) {|device|
         device.uninstall application_package.name
         device.install application_package.path
         device.uninstall tests_package.name
         device.install tests_package.path
+        if !opts[:helper_apk_path].nil?
+          device.uninstall helper_package.name
+          device.install helper_package.path
+        end
         device.shell('mkdir /sdcard/screencasts')
         device
       }
@@ -68,7 +76,7 @@ module Rubotium
 
       puts "There are #{test_suites.count} tests to run"
 
-      runner = Rubotium::TestsRunner.new(devices, test_suites, tests_package, {:annotation=>opts[:annotation]})
+      runner = Rubotium::TestsRunner.new(devices, test_suites, tests_package, {annotation: opts[:annotation], clear: application_package.name})
       runner.run_tests
 
       FileUtils.mkdir_p(['screens', 'logs'])
@@ -80,6 +88,7 @@ module Rubotium
         device.shell('rm -R /sdcard/Robotium-Screenshots')
         device.shell('rm -R /sdcard/RobotiumLogs')
         device.shell('rm -R /sdcard/screencasts')
+        device.shell('reboot')
       }
       FileUtils.mv(Dir.glob('*.jpg'), 'screens')
       FileUtils.mv(Dir.glob('*.log'), 'logs')

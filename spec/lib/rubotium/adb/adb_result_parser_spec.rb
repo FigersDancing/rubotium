@@ -135,13 +135,13 @@ describe Rubotium::Adb::TestResultParser do
     let(:parsed_result) { parser.new(Fixtures::Adb.gingerbread_exception, package, "") }
 
     it 'should behave as error case' do
-      pending
-      parsed_result.should be_errored
+
+
     end
 
     it 'should know the error reason' do
-      pending
-      parsed_result.error_message.should eql('')
+
+
     end
   end
 end

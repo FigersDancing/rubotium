@@ -33,7 +33,7 @@ module Rubotium
         end
 
         def time
-          match_time.strip.to_i
+          match_time.strip.to_f
         end
 
         def message

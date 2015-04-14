@@ -7,6 +7,7 @@ module Rubotium
       @tests_package  = tests_package
       @tests_runner   = tests_package.test_runner
       @options        = options
+      @clear          = options[:clear]
       @test_number    = 0
     end
 
@@ -37,6 +38,7 @@ module Rubotium
             screencast.stop
           end
           results.push(result)
+          clear_if_required(device)
           memory_monitor.stop_and_save(memory_results_file(test))
         end
       }
@@ -49,7 +51,7 @@ module Rubotium
 
     private
 
-    attr_reader :devices, :tests_package, :tests
+    attr_reader :devices, :tests_package, :tests, :clear
 
     def memory_results_file(test)
       File.open("results/memory_logs/#{test.name}.json", 'w+')
@@ -69,6 +71,10 @@ module Rubotium
 
     def tests_queue
       @queue ||= Queue.new
+    end
+
+    def clear_if_required(device)
+      device.shell("pm clear #{clear}") if clear
     end
 
     def test_runner(device)
