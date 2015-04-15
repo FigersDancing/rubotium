@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Rubotium::Adb::Commands::Command do
   let(:subject) { described_class.new(serial) }
   let(:adb_command) { 'the command' }
-  let(:result) { 'result' }
+  let(:result) { Rubotium::CmdResult.new(0, 'result') }
   let(:command_to_run) { double(Object) }
 
   before do
@@ -16,7 +16,7 @@ describe Rubotium::Adb::Commands::Command do
     let(:shell_command) { "adb #{adb_command}" }
 
     it 'executes the command without a serial' do
-      expect(subject.execute(command_to_run)).to eq result
+      expect(subject.execute(command_to_run)).to eq 'result'
     end
   end
 
@@ -25,7 +25,7 @@ describe Rubotium::Adb::Commands::Command do
     let(:shell_command) { "adb #{adb_command}" }
 
     it 'executes the command without a serial' do
-      expect(subject.execute(command_to_run)).to eq result
+      expect(subject.execute(command_to_run)).to eq 'result'
     end
   end
 
@@ -34,7 +34,7 @@ describe Rubotium::Adb::Commands::Command do
     let(:shell_command) { "adb -s #{serial} #{adb_command}" }
 
     it 'executes the command with a serial' do
-      expect(subject.execute(command_to_run)).to eq result
+      expect(subject.execute(command_to_run)).to eq 'result'
     end
   end
 end
