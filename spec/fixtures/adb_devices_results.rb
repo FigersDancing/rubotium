@@ -10,12 +10,16 @@ module Fixtures
           Rubotium::CmdResult.new(0, "List of devices attached \nemulator-5554\tdevice\nemulator-5556\tdevice\n\n")
         end
 
-        def one_device_offline
+        def one_device_attached_and_offline
           Rubotium::CmdResult.new(0, "List of devices attached \nemulator-5554\toffline\n\n")
         end
 
-        def one_device
-          Rubotium::CmdResult.new(0,"List of devices attached \nemulator-5554\tdevice\n\n")
+        def one_device_attached
+          Rubotium::CmdResult.new(0, "List of devices attached \nemulator-5554\tdevice\n\n")
+        end
+
+        def no_devices_attached
+          Rubotium::CmdResult.new(0, "List of devices attached \n\n")
         end
       end
     end
