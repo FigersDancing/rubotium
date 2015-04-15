@@ -24,8 +24,8 @@ describe Rubotium::Apk::AndroidApk do
     let(:apk) { described_class.new(aapt, dummy_file_path) }
 
     it 'should raise exception' do
-      expect(aapt).to receive(:dump).and_return "W/zipro   (77199): Error opening archive spec/lib/rubotium/apk/mock/dummy.apk: Invalid file
-ERROR: dump failed because assets could not be loaded"
+      expect(aapt).to receive(:dump).and_return Rubotium::CmdResult.new(1, "W/zipro   (77199): Error opening archive spec/lib/rubotium/apk/mock/dummy.apk: Invalid file
+ERROR: dump failed because assets could not be loaded")
       expect{apk.package_name}.to raise_error(RuntimeError)
     end
   end
@@ -34,7 +34,7 @@ ERROR: dump failed because assets could not be loaded"
     let(:apk) { described_class.new(aapt, sample_file_path) }
 
       it 'should read package_name' do
-        expect(aapt).to receive(:dump).and_return "package: name='com.example.sample' versionCode='1' versionName='1.0' platformBuildVersionName=''
+        expect(aapt).to receive(:dump).and_return Rubotium::CmdResult.new(0, "package: name='com.example.sample' versionCode='1' versionName='1.0' platformBuildVersionName=''
 sdkVersion:'7'
 targetSdkVersion:'15'
 application-label:'sample'
@@ -50,7 +50,7 @@ feature-group: label=''
 supports-screens: 'small' 'normal' 'large' 'xlarge'
 supports-any-density: 'true'
 locales: '--_--' 'ja'
-densities: '160' '240' '320'"
+densities: '160' '240' '320'")
         expect(apk.package_name).to eql 'com.example.sample'
       end
 

@@ -26,15 +26,15 @@ module Rubotium
 
       def results
         @results ||= aapt.dump(@path)
-        if $?.exitstatus != 0 or @results.index("ERROR: dump failed")
-          raise(RuntimeError, @results)
+        if @results.status_code != 0
+          raise(RuntimeError, @results.result)
         end
         @results
       end
 
       def parsed_aapt
         vars = Hash.new
-        results.split("\n").each do |line|
+        results.result.split("\n").each do |line|
           key, value = _parse_line(line)
           next if key.nil?
           if vars.key?(key)

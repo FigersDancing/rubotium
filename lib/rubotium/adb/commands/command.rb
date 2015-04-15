@@ -44,7 +44,7 @@ module Rubotium
             end
           rescue NoMethodError
             CMD.run_command(adb_command + ' ' + commands)
-          end
+          end.result
         end
 
         private
