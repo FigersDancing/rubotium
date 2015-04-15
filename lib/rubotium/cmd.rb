@@ -8,7 +8,7 @@ module Rubotium
 
       def run_command(command_to_run, opts = {})
         begin
-          Timeout::timeout(opts[:timeout] || 150) {
+          Timeout::timeout(opts[:timeout] || 10*60) {
             Rubotium.logger.debug "[EXECUTING]: #{command_to_run}"
             new(command_to_run).execute
           }
