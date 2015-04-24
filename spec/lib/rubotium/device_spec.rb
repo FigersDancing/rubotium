@@ -19,8 +19,8 @@ shared_examples 'a Rubotium::Device' do
     device.pull(files_to_pull)
   end
 
-  it "knows it's name" do
-    expect(command).to receive(:shell).with("getprop ro.product.model").and_return('MyNameIs')
+  it 'knows its name' do
+    expect(command).to receive(:shell).with('getprop ro.product.model').and_return(result)
     expect(device.name).to eql('MyNameIs')
   end
 
@@ -33,7 +33,8 @@ end
 
 describe Rubotium::Device do
   let(:device)  { described_class.new(serial) }
-  let(:command) { double(Rubotium::Adb::Commands::Command)}
+  let(:command) { double(Rubotium::Adb::Commands::Command) }
+  let(:result) { (OpenStruct.new(:status_code => 0, :result => 'MyNameIs')) }
 
   before do
     device.stub(:adb_command).and_return(command)

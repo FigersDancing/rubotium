@@ -6,11 +6,11 @@ module Rubotium
     end
 
     def name
-      @name ||= adb_command.shell('getprop ro.product.model').strip
+      @name ||= adb_command.shell('getprop ro.product.model').result.strip
     end
 
     def sdk
-      @sdk ||= adb_command.shell('getprop ro.build.version.sdk').strip
+      @sdk ||= adb_command.shell('getprop ro.build.version.sdk').result.strip
     end
 
     def clean_logcat

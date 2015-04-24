@@ -7,27 +7,27 @@ module Rubotium
         end
 
         def clean_logcat
-          execute(logcat_command(:clean => true))
+          execute(logcat_command(:clean => true)).result
         end
 
         def logcat
-          execute(logcat_command(:dump => true))
+          execute(logcat_command(:dump => true)).result
         end
 
         def install(apk_path)
-          execute(install_command(apk_path))
+          execute(install_command(apk_path)).result
         end
 
         def uninstall(package_name)
-          execute(uninstall_command(package_name))
+          execute(uninstall_command(package_name)).result
         end
 
         def pull(files_glob)
-          execute(pull_command(files_glob))
+          execute(pull_command(files_glob)).result
         end
 
         def push(local_glob, remote_dest)
-          execute(push_command(local_glob, remote_dest))
+          execute(push_command(local_glob, remote_dest)).result
         end
 
         def shell(command)
@@ -44,7 +44,7 @@ module Rubotium
             end
           rescue NoMethodError
             CMD.run_command(adb_command + ' ' + commands)
-          end.result
+          end
         end
 
         private

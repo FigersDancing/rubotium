@@ -7,7 +7,7 @@ module Rubotium
     end
 
     def read_tests
-      result = device.shell(instrument_command)
+      result = device.shell(instrument_command).result
       Rubotium::Adb::Parsers::TestResultsParser.new(result).test_results.map{|test|
         create_runnable_test(test)
       }

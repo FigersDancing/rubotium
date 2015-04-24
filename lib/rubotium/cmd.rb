@@ -13,7 +13,7 @@ module Rubotium
             new(command_to_run).execute
           }
         rescue Timeout::Error
-          ""
+          CmdResult.new(1, '')
         end
       end
     end

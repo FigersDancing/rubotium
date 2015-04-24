@@ -16,7 +16,7 @@ describe Rubotium::Adb::Commands::Command do
     let(:shell_command) { "adb #{adb_command}" }
 
     it 'executes the command without a serial' do
-      expect(subject.execute(command_to_run)).to eq 'result'
+      expect(subject.execute(command_to_run).result).to eq 'result'
     end
   end
 
@@ -25,7 +25,7 @@ describe Rubotium::Adb::Commands::Command do
     let(:shell_command) { "adb #{adb_command}" }
 
     it 'executes the command without a serial' do
-      expect(subject.execute(command_to_run)).to eq 'result'
+      expect(subject.execute(command_to_run).result).to eq 'result'
     end
   end
 
@@ -34,7 +34,7 @@ describe Rubotium::Adb::Commands::Command do
     let(:shell_command) { "adb -s #{serial} #{adb_command}" }
 
     it 'executes the command with a serial' do
-      expect(subject.execute(command_to_run)).to eq 'result'
+      expect(subject.execute(command_to_run).result).to eq 'result'
     end
   end
 end
