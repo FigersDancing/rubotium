@@ -1,29 +1,30 @@
+require 'ostruct'
+
 module Rubotium
   module TestRunners
     class InstrumentationTestRunner
-      def initialize(device, test_package, options = {})
+      def initialize(device, test_package, options = {}, log_writter = LogWritter.new)
         @device         = device
         @test_package   = test_package
         @annotations    = options.delete(:annotation)
+        @log_writter    = log_writter
       end
 
       def run_test(runnable_test)
         device.clean_logcat
         result = execute(instrument_command(runnable_test))
-        File.open("results/logs/#{runnable_test.name}.log", 'w+') do |file|
-          file.write device.logcat
-        end
+        log_writter.save_to_file(runnable_test.name, device.logcat)
         Rubotium::TestResult.new(result , runnable_test)
       end
 
       private
 
-      attr_reader :device, :test_package
+      attr_reader :device, :test_package, :log_writter
 
       def execute(command)
         cmd_result = device.shell(command)
         if (cmd_result.status_code == 1)
-          Struct.new(
+          OpenStruct.new(
             test_results: [],
             count: 0,
             failed?: true,
