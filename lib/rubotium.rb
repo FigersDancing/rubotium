@@ -77,9 +77,10 @@ module Rubotium
       test_suites = Rubotium::TestCasesReader.new(devices.first, tests_package, { :annotation => opts[:annotation]}).read_tests
       if opts[:exclude]
         excluded_suites = Rubotium::TestCasesReader.new(devices.first, tests_package, { :annotation => opts[:exclude]}).read_tests
-        test_suites.reject!{|element|
-          excluded_suites.include? element
-        }
+        test_suites.reject!{ |excluded_suite| excluded_suites.include? excluded_suite }
+
+        puts "Excluded tests:"
+        excluded_suites.each{ |excluded| puts excluded.name }
       end
 
       puts "There are #{test_suites.count} tests to run"

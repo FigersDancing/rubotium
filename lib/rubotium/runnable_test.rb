@@ -9,5 +9,13 @@ module Rubotium
     def name
       "#{package_name}##{test_name}"
     end
+
+    def ==(other)
+      name == other.name
+    end
+
+    def eql?(other)
+      name == other.name
+    end
   end
 end
