@@ -74,7 +74,13 @@ module Rubotium
         device
       }
 
-      test_suites = Rubotium::TestCasesReader.new(devices.first, tests_package, { :annotation=>opts[:annotation]}).read_tests
+      test_suites = Rubotium::TestCasesReader.new(devices.first, tests_package, { :annotation => opts[:annotation]}).read_tests
+      if opts[:exclude]
+        excluded_suites = Rubotium::TestCasesReader.new(devices.first, tests_package, { :annotation => opts[:exclude]}).read_tests
+        test_suites.reject!{|element|
+          excluded_suites.include? element
+        }.count
+      end
 
       puts "There are #{test_suites.count} tests to run"
 
