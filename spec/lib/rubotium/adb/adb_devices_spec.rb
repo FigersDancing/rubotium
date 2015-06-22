@@ -55,8 +55,8 @@ describe Rubotium::Adb::Devices do
   end
 
   context 'when no devices are attached' do
-    it 'should run adb_devices_command 5 times' do
-      devices.should_receive(:adb_devices_command).exactly(5).times
+    it 'should run adb_devices_command 10 times' do
+      devices.should_receive(:adb_devices_command).exactly(10).times
           .and_return(Fixtures::Adb::Devices.no_devices_attached.result)
       devices.attached
     end
