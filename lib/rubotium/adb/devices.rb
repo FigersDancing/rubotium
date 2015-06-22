@@ -20,8 +20,8 @@ module Rubotium
       end
 
       def get_device_list
-        tries = 4
-        while ((list = adb_devices_command.split("\n")[1..-1]).empty? && tries > 0)
+        tries = 5
+        while (tries > 0 && (list = adb_devices_command.split("\n")[1..-1]).empty?)
           tries -= 1
         end
         attached_devices list
