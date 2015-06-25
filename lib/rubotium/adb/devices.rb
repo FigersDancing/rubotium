@@ -15,8 +15,14 @@ module Rubotium
 
       def adb_devices_command
         CMD.run_command('adb kill-server')
+        wait_for_adb
         CMD.run_command('adb start-server')
+        wait_for_adb
         CMD.run_command('adb devices', { :timeout => 5 } ).result
+      end
+
+      def wait_for_adb
+        sleep 2
       end
 
       def get_device_list
