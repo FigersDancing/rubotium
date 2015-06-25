@@ -33,13 +33,6 @@ describe Rubotium::TestsRunner do
         expect(runner.send :tests_queue).to be_empty
       end
 
-      it 'executes tests on all devices' do
-        pending
-        expect(device1).to receive(:shell).exactly(1).times.and_return { sleep 1 }
-        expect(device2).to receive(:shell).exactly(10).times
-        runner.run_tests
-      end
-
       it 'knows how many tests it has' do
         runner.tests_count.should eql(11)
       end

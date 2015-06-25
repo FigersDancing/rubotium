@@ -11,7 +11,7 @@ module Rubotium
     end
 
     def ==(other)
-      name == other.name
+      other.instance_of?(self.class) && @name == other.name
     end
 
     def eql?(other)
