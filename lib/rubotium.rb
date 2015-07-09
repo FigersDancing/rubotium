@@ -84,6 +84,9 @@ module Rubotium
       end
 
       puts "There are #{test_suites.count} tests to run"
+
+      exit 1 if test_suites.count == 0
+
       runner = Rubotium::TestsRunner.new(devices, test_suites, tests_package, {annotation: opts[:annotation], clear: application_package.name})
       runner.run_tests
 
