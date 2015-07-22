@@ -18,7 +18,12 @@ module Rubotium
         wait_for_adb
         CMD.run_command('adb start-server')
         wait_for_adb
-        CMD.run_command('adb devices', { :timeout => 5 } ).result
+        devices = CMD.run_command('adb devices', { :timeout => 5 } )
+        if devices.status_code != 1
+          devices.result
+        else
+          raise Rubotium::NoDevicesError
+        end
       end
 
       def wait_for_adb
