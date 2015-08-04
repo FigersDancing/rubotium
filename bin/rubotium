@@ -12,8 +12,8 @@ opts = Trollop::options do
     opt :device,          'Match devices',                :type     => :string,       :short  =>  '-d'
     opt :sdk,             'Run on devices with sdk',      :type     => :string,       :short  =>  '-k'
     opt :runner,          'Test runner',                  :type     => :string,       :short  =>  '-r'
-    opt :annotation,      'Run annotated tests',          :type     => :string,       :short  =>  '-n'
-    opt :exclude,         'Run annotated tests',          :type     => :string,       :short  =>  '-e'
+    opt :annotation,      'Run tests with annotation',    :type     => :string,       :short  =>  '-n'
+    opt :excludes,        'Run tests without annotations',:type     => :strings,      :short  =>  '-e'
     opt :helper_apk_path, 'Path to the helper .apk file', :type     => :string,       :short  =>  '-H'
     opt :serial,          'Device serial',                :type     => :string,       :short  =>  '-s'
 end
@@ -29,7 +29,7 @@ params = {
     :device_sdk         => opts[:sdk],
     :runner             => opts[:runner],
     :annotation         => opts[:annotation],
-    :exclude            => opts[:exclude],
+    :excludes           => opts[:excludes],
     :helper_apk_path    => opts[:helper_apk_path]
 }
 
